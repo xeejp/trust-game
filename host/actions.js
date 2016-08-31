@@ -15,3 +15,5 @@ export const changeGameRound = createAction('CHANGE_GAME_ROUND', game_round => g
 
 export const intoLoading = createAction('INTO_LOADING')
 export const exitLoading = createAction('EXIT_LOADING')
+
+export const openParticipantPage = createAction('open participant page')

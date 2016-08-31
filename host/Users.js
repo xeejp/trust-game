@@ -1,14 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import { getRoleName, getStateName } from '../util/index.js'
 
-const User = ({ id, role, point, pair_id}) => (
-  <tr><td>{id}</td><td>{getRoleName(role)}</td><td>{point}</td><td>{pair_id}</td></tr>
+import { openParticipantPage } from './actions'
+
+const User = ({ id, role, point, pair_id, openParticipantPage }) => (
+  <tr><td><a onClick={openParticipantPage(id)}>{id}</a></td>
+  <td>{getRoleName(role)}</td>
+  <td>{point}</td>
+  <td>{pair_id}</td>
+  </tr>
 )
 
-const UsersList = ({participants}) => (
+const UsersList = ({participants, openParticipantPage }) => (
   <table>
     <thead><tr><th>ID</th><th>役割</th><td>ポイント</td><td>所属ペアID</td></tr></thead>
     <tbody>
@@ -20,6 +27,7 @@ const UsersList = ({participants}) => (
             role={participants[id].role}
             point={participants[id].point}
             pair_id={participants[id].pair_id}
+            openParticipantPage={openParticipantPage}
           />
         ))
       }
@@ -54,7 +62,14 @@ const mapStateToProps = ({ pairs, participants, game_round }) => ({
   pairs, participants, game_round
 })
 
-const Users = ({ pairs, participants, game_round }) => (
+const mapDispatchToProps = (dispatch) => {
+  const open = bindActionCreators(openParticipantPage, dispatch)
+  return {
+    openParticipantPage: (id) => () => open(id)
+  }
+}
+
+const Users = ({ pairs, participants, game_round, openParticipantPage }) => (
   <div>
     <Card style={{margin: '16px 16px'}}>
       <CardHeader
@@ -65,6 +80,7 @@ const Users = ({ pairs, participants, game_round }) => (
       <CardText expandable={true}>
         <UsersList
           participants={participants}
+          openParticipantPage={openParticipantPage}
         />
       </CardText>
     </Card>
@@ -85,4 +101,4 @@ const Users = ({ pairs, participants, game_round }) => (
   </div>
 )
 
-export default connect(mapStateToProps)(Users)
+export default connect(mapStateToProps, mapDispatchToProps)(Users)
