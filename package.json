@@ -32,12 +32,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xeejp/ultimatum-and-dictator-games.git"
+    "url": "git+https://github.com/xeejp/dictator-game.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xeejp/ultimatum-and-dictator-games/issues"
+    "url": "https://github.com/xeejp/dictator-game/issues"
   },
-  "homepage": "https://github.com/xeejp/ultimatum-and-dictator-games#readme",
+  "homepage": "https://github.com/xeejp/dictator-game#readme",
   "description": ""
 }

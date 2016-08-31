@@ -56,7 +56,6 @@ function* showResultsSaga() {
   while(true) {
     yield take(`${showResults}`)
     const results = {
-      ultimatum_results: yield select(({ ultimatum_results }) => ultimatum_results),
       dictator_results: yield select(({ dictator_results }) => dictator_results) 
     }
     sendData('SHOW_RESULTS', results)
