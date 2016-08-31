@@ -5,7 +5,7 @@ React + Redux with Webpack
 ```
 $ cd <your xee root>/experiments
 $ git clone git@github.com:xeejp/dictator-game.git
-$ cd ultimatum-and-dictator-games/
+$ cd dictator-game/
 $ npm install
 $ webpack
 ```
