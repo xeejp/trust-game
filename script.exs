@@ -1,4 +1,4 @@
-defmodule UltimatumAndDictaorGames do
+defmodule DictaorGame do
   use Xee.ThemeScript
   require Logger
 
@@ -7,10 +7,10 @@ defmodule UltimatumAndDictaorGames do
   require_file "scripts/participant.exs"
   require_file "scripts/actions.exs"
 
-  alias UltimatumAndDictaorGames.Host
-  alias UltimatumAndDictaorGames.Participant
-  alias UltimatumAndDictaorGames.Main
-  alias UltimatumAndDictaorGames.Actions
+  alias DictaorGame.Host
+  alias DictaorGame.Participant
+  alias DictaorGame.Main
+  alias DictaorGame.Actions
 
   # Callbacks
   def script_type do
@@ -22,14 +22,10 @@ defmodule UltimatumAndDictaorGames do
   def init do
     {:ok, %{"data" => %{
         page: "waiting",
-        game_mode: "ultimatum",
         game_round: 1,
-        game_redo: 0,
-        inf_redo: false,
         game_progress: 0,
         participants: %{},
         pairs: %{},
-        ultimatum_results: %{},
         dictator_results: %{},
       }
     }}
@@ -61,9 +57,6 @@ defmodule UltimatumAndDictaorGames do
       {"RESET", _} -> Host.reset(data)
       {"CHANGE_PAGE", page} -> Host.change_page(data, page)
       {"CHANGE_GAME_ROUND", game_round} -> Host.change_game_round(data, game_round)
-      {"CHANGE_INF_REDO", inf_redo} -> Host.change_inf_redo(data, inf_redo)
-      {"CHANGE_GAME_REDO", game_redo} -> Host.change_game_redo(data, game_redo)
-      {"CHANGE_GAME_MODE", game_mode} -> Host.change_game_mode(data, game_mode)
       _ -> {:ok, %{"data" => data}}
     end
     wrap_result(result)
@@ -77,8 +70,6 @@ defmodule UltimatumAndDictaorGames do
       {"FINISH_ALLOCATING", allo_temp} -> Participant.finish_allocating(data, id, allo_temp)
       {"CHANGE_ALLO_TEMP", allo_temp} -> Participant.change_allo_temp(data, id, allo_temp)
       {"RESPONSE_OK", result} -> Participant.response_ok(data, id, result)
-      {"REDO_ALLOCATING", _} -> Participant.redo_allocating(data, id)
-      {"RESPONSE_NG", result} -> Participant.response_ng(data, id, result)
       _ -> {:ok, %{"data" => data}}
     end
     wrap_result(result)

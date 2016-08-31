@@ -10,22 +10,14 @@ import { fallChartButton } from 'host/actions.js'
 
 function compDataAccept(categories, results, round) {
   const values = results[round]? Object.keys(results[round]).filter(id =>
-    results[round][id]? results[round][id].accept : false).map(id =>
-      results[round][id].value) : []
-  return Array.from(categories).map(x => values.filter(y => x == y).length)
-}
-
-function compDataRefuse(categories, results, round) {
-  const values = results[round]? Object.keys(results[round]).filter(id =>
-    results[round][id]? !results[round][id].accept : false).map(id =>
+    results[round][id]? true : false).map(id =>
       results[round][id].value) : []
   return Array.from(categories).map(x => values.filter(y => x == y).length)
 }
 
 const categories = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 
-const mapStateToProps = ({ultimatum_results, dictator_results, chart_round, chart_button, role}) => ({
-  ultimatum_results,
+const mapStateToProps = ({ dictator_results, chart_round, chart_button, role}) => ({
   dictator_results,
   role,
   chart_round,
@@ -39,7 +31,7 @@ const mapStateToProps = ({ultimatum_results, dictator_results, chart_round, char
         href: 'https://xee.jp/'
       },
       title: {
-        text: "提案者に分配されたポイント"
+        text: "独裁者に分配されたポイント"
       },
       xAxis: {
         categories: categories,
@@ -74,17 +66,7 @@ const mapStateToProps = ({ultimatum_results, dictator_results, chart_round, char
       },
       series: [
         {
-          name: "最後通牒・承認",
-          data: compDataAccept(categories, ultimatum_results, chart_round),
-          stack: 'ultimatum'
-        },
-        {
-          name: "最後通牒・拒否",
-          data: compDataRefuse(categories, ultimatum_results, chart_round),
-          stack: 'ultimatum'
-        },
-        {
-          name: "独裁者・承認",
+          name: "承認",
           data: compDataAccept(categories, dictator_results, chart_round),
           stack: 'dictator',
         },

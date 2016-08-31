@@ -1,6 +1,6 @@
-defmodule UltimatumAndDictaorGames.Host do
-  alias UltimatumAndDictaorGames.Main
-  alias UltimatumAndDictaorGames.Actions
+defmodule DictaorGame.Host do
+  alias DictaorGame.Main
+  alias DictaorGame.Actions
 
   # Actions
   def fetch_contents(data) do
@@ -20,12 +20,8 @@ defmodule UltimatumAndDictaorGames.Host do
                     end)
                     |> Enum.into(%{}),
       pairs: %{},
-      ultimatum_results: %{},
       dictator_results: %{},
-      game_mode: "ultimatum",
       game_round: 1,
-      game_redo: 0,
-      inf_redo: false,
     }
     |> Actions.reseted()
   end
@@ -39,10 +35,7 @@ defmodule UltimatumAndDictaorGames.Host do
   end
 
   def show_results(data, results) do
-    put_in(data, [:ultimatum_results],
-      get_in(results, ["ultimatum_results"])
-    )
-    |> put_in([:dictator_results],
+    put_in(data, [:dictator_results],
       get_in(results, ["dictator_results"])
     )
     |> Actions.show_results(results)
@@ -63,24 +56,7 @@ defmodule UltimatumAndDictaorGames.Host do
     |> Actions.change_game_round(game_round)
   end
 
-  def change_inf_redo(data, inf_redo) do
-    %{data | inf_redo: inf_redo }
-    |> Actions.change_inf_redo(inf_redo)
-  end
-
-  def change_game_redo(data, game_redo) do
-    if game_redo < -1 do game_redo = 0 end
-    %{data | game_redo: game_redo }
-    |> Actions.change_game_redo(game_redo)
-  end
-
-  def change_game_mode(data, game_mode) do
-    %{data | game_mode: game_mode }
-    |> Actions.change_game_mode(game_mode)
-  end
-
   def match(data) do
-    %{game_mode: game_mode} = data
     %{participants: participants} = data
     participants = participants
                     |> Enum.map(fn({id, state}) ->
@@ -108,12 +84,8 @@ defmodule UltimatumAndDictaorGames.Host do
     end
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
-      proposer = case game_mode do
-        "ultimatum" -> "proposer"
-        "dictator" -> "dictator"
-      end
       participants = participants
-                      |> Map.update!(id1, &updater.(&1, group, proposer))
+                      |> Map.update!(id1, &updater.(&1, group, "dictator"))
                       |> Map.update!(id2, &updater.(&1, group, "responder"))
 
       pairs = Map.put(pairs, group, Main.new_pair(ids))

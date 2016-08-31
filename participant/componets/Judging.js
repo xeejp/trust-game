@@ -10,58 +10,38 @@ import { getRoleName } from 'util/index'
 import {
   submitAlloTemp,
   finishAllocating,
-  redoAllcating,
 } from '../actions.js'
 
-const mapStateToProps = ({ allo_temp, change_count, role, game_mode, now_round, redo_count, game_redo, inf_redo }) => ({
-  allo_temp, change_count, role, game_mode, now_round, redo_count, game_redo, inf_redo,
+const mapStateToProps = ({ allo_temp, change_count, role, now_round }) => ({
+  allo_temp, change_count, role, now_round,
 })
 
 import {
   responseOK,
-  responseNG,
 } from '../actions.js'
 
 class Allocating extends Component {
   constructor() {
     super()
     this.handleOK = this.handleOK.bind(this)
-    this.handleNG = this.handleNG.bind(this)
   }
 
   handleOK = () => {
     const { dispatch, allo_temp, change_count, now_round } = this.props
-
     const result = {
       value: allo_temp,
       change_count: change_count,
-      accept: true,
       now_round: now_round,
     }
     dispatch(responseOK(result))
   }
 
-  handleNG = () => {
-    const { dispatch, change_count, now_round, redo_count, game_redo, inf_redo } = this.props
-    if(inf_redo || redo_count < game_redo) {
-      dispatch(redoAllcating())
-    } else {
-      const result = {
-        value: 0,
-        change_count: change_count,
-        accept: false,
-        now_round: now_round,
-      }
-      dispatch(responseNG(result))
-    }
-  }
-
   render() {
-    const { allo_temp, role, game_mode} = this.props
+    const { allo_temp, role } = this.props
     const style = {
       margin: 12,
     }
-    const enemy = (role == "responder")? ((game_mode == "ultimatum")? "proposer": "dictator") : "responder"
+    const enemy = (role == "responder")? "dictator" : "responder"
     return (
       <div>
         <Card>
@@ -85,8 +65,7 @@ class Allocating extends Component {
                 <RaisedButton
                   label="拒否"
                   secondary={true}
-                  disabled={game_mode=="dictator"}
-                  onClick={this.handleNG}
+                  disabled={true}
                 />
               </div>
             }

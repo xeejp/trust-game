@@ -1,11 +1,9 @@
-defmodule UltimatumAndDictaorGames.Main do
+defmodule DictaorGame.Main do
 
-  @game_modes ["ultimatum", "dictator"]
   @pages ["waiting", "description", "experiment", "result"]
-  @roles ["visitor", "proposer", "responder"]
+  @roles ["visitor", "dictator", "responder"]
   @states ["allocating", "judging", "finished"]
 
-  def game_modes, do: @game_modes
   def pages, do: @pages
   def roles, do: @roles
   def states, do: @states
@@ -29,7 +27,6 @@ defmodule UltimatumAndDictaorGames.Main do
     %{
       members: members,
       now_round: 1,
-      redo_count: 0,
       allo_temp: Enum.random(0..10) * 100,
       state: "allocating",
     }

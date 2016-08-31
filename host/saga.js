@@ -8,9 +8,6 @@ import {
   match,
   changePage,
   changeGameRound,
-  changeGameMode,
-  changeGameRedo,
-  changeInfRedo,
 } from './actions.js'
 
 import {
@@ -86,27 +83,6 @@ function* changeGameRoundSaga() {
   }
 }
 
-function* changeGameRedoSaga() {
-  while(true) {
-    const { payload } = yield take(`${changeGameRedo}`)
-    sendData('CHANGE_GAME_REDO', payload)
-  }
-}
-
-function* changeInfRedoSaga() {
-  while(true) {
-    const { payload } = yield take(`${changeInfRedo}`)
-    sendData('CHANGE_INF_REDO', payload)
-  }
-}
-
-function* changeGameModeSaga() {
-  while(true) {
-    const { payload } = yield take(`${changeGameMode}`)
-    sendData('CHANGE_GAME_MODE', payload)
-  }
-}
-
 function* saga() {
   yield fork(fetchContentsSaga)
   yield fork(matchSaga)
@@ -114,10 +90,7 @@ function* saga() {
   yield fork(syncGameProgressSaga)
   yield fork(showResultsSaga)
   yield fork(changePageSaga)
-  yield fork(changeInfRedoSaga)
-  yield fork(changeGameRedoSaga)
   yield fork(changeGameRoundSaga)
-  yield fork(changeGameModeSaga)
 }
 
 export default saga

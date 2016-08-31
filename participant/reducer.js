@@ -16,7 +16,6 @@ import {
   finishJudging,
   responseOK,
   redoAllcating,
-  responseNG,
   fallSnackBarFlags,
   fallSnackBarFlags2,
   fallSnackBarFlags3,
@@ -52,9 +51,7 @@ const reducer = concatenateReducers([
     }),
     'reseted': () => ({
       page: "waiting",
-      game_mode: "ultimatum",
       game_round: 1,
-      game_redo: 0,
       role: "visitor",
       point: 0,
       pair_id: null,
@@ -63,7 +60,6 @@ const reducer = concatenateReducers([
       participants_length: payload
     }),
     'show results': (_ , { payload: {ultimatum_results, dictator_results} }) => ({
-      ultimatum_results: ultimatum_results,
       dictator_results: dictator_results
     }),
     'join': ({ participants }, { payload: { id, participant } }) => ({
@@ -82,12 +78,11 @@ const reducer = concatenateReducers([
     'change allo_temp': ({ change_count }, { payload })=> ({ allo_temp: payload, change_count: change_count + 1}), 
     [finishAllocating]: (_, { payload }) => ({ state: "judging", allo_temp: payload}),
     'finish allocating': (_, { payload }) => ({ state: "judging", allo_temp: payload}),
-    [responseOK]: ( {now_round, game_mode,
-      game_round, state, point,
-      role, allo_temp }, { payload: { value: value } }) => ({
+    [responseOK]: ( {now_round, game_round, state, point, role, allo_temp },
+      { payload: { value: value } }) => ({
       state: (now_round < game_round)? "allocating" : "finished",
       now_round: (now_round < game_round)? now_round+1 : now_round,
-      role: (role == "responder")? ((game_mode == "ultimatum")? "proposer": "dictator") : "responder",
+      role: (role == "responder")? "dictator" : "responder",
       point: point + 1000 - value,
       allo_result: allo_temp,
       allo_temp: 100 * Math.round(10* Math.random()),
@@ -106,51 +101,16 @@ const reducer = concatenateReducers([
       responsedOK: true,
       change_count: 0,
     }),
-    [responseNG]: ({state, now_round, game_round, role, game_mode, game_redo, redo_count}, {}) => ({
-        state: (now_round < game_round)? "allocating" : "finished",
-        now_round: (now_round < game_round)? now_round+1 : now_round,
-        role: (role == "responder")? ((game_mode == "ultimatum")? "proposer": "dictator") : "responder",
-        allo_temp: 100 * Math.round(10* Math.random()),
-        responseNG: true,
-        change_count: 0,
-        redo_count: 0,
-    }),
-    [redoAllcating]: ({redo_count}, {}) => ({
-      state: "allocating",
-      redo_count: redo_count + 1,
-      redo_flag: true,
-    }),
-    'redo allocating': ({redo_count}, {}) => ({
-      state: "allocating",
-      redo_count: redo_count + 1,
-      redo_flag: true,
-    }),
-    'response ng': ({state, now_round, game_round, role, game_mode}, {}) => ({
-      redo_count: 0,
-      state: (now_round < game_round)? "allocating" : "finished",
-      now_round: (now_round < game_round)? now_round+1 : now_round,
-      role: (role == "responder")? ((game_mode == "ultimatum")? "proposer": "dictator") : "responder",
-      allo_temp: 100 * Math.round(10* Math.random()),
-      responsedNG: true,
-      change_count: 0,
-    }),
     [fallSnackBarFlags]: ({ state }) => ({
       responsedOK: false,
       responseOK: false,
-      responsedNG: false,
-      responseNG: false,
       changeRole: state == "allocating",
     }),
     [fallSnackBarFlags2]: ({}) => ({changeRole: false}),
-    [fallSnackBarFlags3]: ({}) => ({redo_flag: false}),
     [changeChartRound]: (_, { payload }) => ({ chart_round: payload, chart_button: true }),
     [fallChartButton]: () => ({ chart_button: false}),
     'change page': (_, { payload }) => ({ page: payload }),
-    'change inf_redo': (_, { payload }) => ({ inf_redo: payload }),
-    'change game_redo': (_, { payload }) => ({ game_redo: payload }),
     'change game_round': (_, { payload }) => ({ game_round: payload }),
-    'change game_redo': (_, { payload }) => ({ game_redo: payload }),
-    'change game_mode': (_, { payload }) => ({ game_mode: payload }),
   }, initialState),
   handleAction('update contents', () => ({ loading: false }), { loading: true })
 ])

@@ -12,10 +12,9 @@ import {
   finishAllocating,
 } from '../actions.js'
 
-const mapStateToProps = ({ allo_temp, role, game_mode }) => ({
+const mapStateToProps = ({ allo_temp, role }) => ({
   allo_temp,
   role,
-  game_mode,
 })
 
 class Allocating extends Component {
@@ -36,11 +35,11 @@ class Allocating extends Component {
   }
 
   render() {
-    const { allo_temp, role, game_mode} = this.props
+    const { allo_temp, role } = this.props
     const style = {
       margin: 12,
     }
-    const enemy = (role == "responder")? ((game_mode == "ultimatum")? "proposer": "dictator") : "responder"
+    const enemy = (role == "responder")? "dictator" : "responder"
     return (
       <div>
         <Card>

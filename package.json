@@ -1,5 +1,5 @@
 {
-  "name": "ultimatum-and-dictator-games",
+  "name": "dictator-game",
   "version": "1.0.0",
   "dependencies": {
     "babel-polyfill": "^6.8.0",

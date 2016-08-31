@@ -1,6 +1,6 @@
-defmodule UltimatumAndDictaorGames.Actions do
-  alias UltimatumAndDictaorGames.Participant
-  alias UltimatumAndDictaorGames.Host
+defmodule DictaorGame.Actions do
+  alias DictaorGame.Participant
+  alias DictaorGame.Host
 
   def reseted(data) do
     host_action = get_action("reseted", %{participants: data.participants})
@@ -26,21 +26,6 @@ defmodule UltimatumAndDictaorGames.Actions do
 
   def change_game_round(data, game_round) do
     action = get_action("change game_round", game_round)
-    format(data, nil, dispatch_to_all(data, action))
-  end
-
-  def change_inf_redo(data, inf_redo) do
-    action = get_action("change inf_redo", inf_redo)
-    format(data, nil, dispatch_to_all(data, action))
-  end
-
-  def change_game_redo(data, game_redo) do
-    action = get_action("change game_redo", game_redo)
-    format(data, nil, dispatch_to_all(data, action))
-  end
-
-  def change_game_mode(data, game_mode) do
-    action = get_action("change game_mode", game_mode)
     format(data, nil, dispatch_to_all(data, action))
   end
 
@@ -78,39 +63,10 @@ defmodule UltimatumAndDictaorGames.Actions do
     dictator_results = get_in(data, [:dictator_results])
     host_action = get_action("push results", %{
       id: id, target_id: target_id, pair_id: pair_id, result: result,
-      ultimatum_results: ultimatum_results, dictator_results: dictator_results
+      dictator_results: dictator_results
     })
     target_action = get_action("response ok", get_in(result, ["value"]))
     format(data, host_action, dispatch_to(target_id, target_action)) 
-  end
-
-  def redo_allocating(data, id) do
-    pair_id = get_in(data, [:participants, id, :pair_id])
-    members = get_in(data, [:pairs, pair_id, :members])
-    target_id = case members do
-      [^id, target_id] -> target_id
-      [target_id, ^id] -> target_id
-    end
-    host_action = get_action("redo allocating", pair_id)
-    target_action = get_action("redo allocating", nil)
-    format(data, host_action, dispatch_to(target_id, target_action))
-  end
-
-  def response_ng(data, id, result) do
-    pair_id = get_in(data, [:participants, id, :pair_id])
-    members = get_in(data, [:pairs, pair_id, :members])
-    target_id = case members do
-      [^id, target_id] -> target_id
-      [target_id, ^id] -> target_id
-    end
-    ultimatum_results = get_in(data, [:ultimatum_results])
-    dictator_results = get_in(data, [:dictator_results])
-    host_action = get_action("push results", %{
-      id: id, target_id: target_id, pair_id: pair_id, result: result,
-      ultimatum_results: ultimatum_results, dictator_results: dictator_results
-    })
-    target_action = get_action("response ng", nil)
-    format(data, host_action, dispatch_to(target_id, target_action))
   end
 
   def show_results(data, results) do

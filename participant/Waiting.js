@@ -6,14 +6,13 @@ import CircularProgress from 'material-ui/CircularProgress'
 
 import { getGamemodeName } from 'util/index'
 
-const mapStateToProps = ({ game_mode, participants_length}) => ({
-  game_mode,
+const mapStateToProps = ({ participants_length }) => ({
   participants_length,
 })
 
-const Waiting = ({ game_mode, participants_length }) => (
+const Waiting = ({ participants_length }) => (
   <Card>
-    <CardTitle title={getGamemodeName(game_mode)} subtitle="待機画面" />
+    <CardTitle title="独裁者ゲーム" subtitle="待機画面" />
     <CardText>
       <p>参加者の登録を待っています。現在の参加者: {participants_length}人</p>
       <p>この画面のまましばらくお待ち下さい。</p>
