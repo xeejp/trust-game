@@ -11,14 +11,12 @@ import {
 import {
   changeChartRound,
   fallChartButton,
-  submitAlloTemp,
-  finishAllocating,
-  finishJudging,
-  responseOK,
-  redoAllcating,
+  syncInvTemp,
+  finishInvesting,
+  syncResTemp,
+  finishResponding,
   fallSnackBarFlags,
   fallSnackBarFlags2,
-  fallSnackBarFlags3,
 } from './actions.js'
 
 const initialState = {
@@ -27,86 +25,64 @@ const initialState = {
   pair_id: null,
   chart_round: 1,
   chart_button: false,
-  now_round: 1,
-  allo_temp: 100 * Math.round(10 * Math.random()),
-  change_count: 0,
-  dictator_results: {},
-  state: "allocating",
-  responsedOK: false,
-  responseOK: false,
-  changeRole: false,
-  redo_flag: false,
+  pair_round: 1,
+  pair_state: "investing",
+  inv_temp: 0,
+  res_temp: 0,
+  inv_results: {},
+  change_role_flag: false,
   participants_length: 0,
 }
 
 const reducer = concatenateReducers([
   handleActions({
     'update contents': (_, { payload }) => payload,
-    'sync game progress': (_, { payload }) => ({
-      game_progress: payload
-    }),
+    'sync game progress': (_, { payload }) => ({ game_progress: payload }),
+    'sync participants length': (_, { payload }) => ({ participants_length: payload }),
+
+    'change page': (_, { payload }) => ({ game_page: payload }),
+    'change game_round': (_, { payload }) => ({ game_round: payload }),
+    'change game_point': (_, { payload }) => ({ game_point: payload }),
+    'change game_rate': (_, { payload }) => ({ game_rate: payload }),
+
     'reseted': () => ({
-      page: "waiting",
-      game_round: 1,
-      role: "visitor",
-      point: 0,
-      pair_id: null,
-    }),
-    'sync participants length': (_, { payload }) => ({
-      participants_length: payload
+      game_page: "waiting", game_round: 1, game_point: 10, game_rate: 3, role: "visitor", point: 0, pair_id: null,
     }),
     'show results': (_ , { payload: {ultimatum_results, dictator_results} }) => ({
       dictator_results: dictator_results
     }),
     'join': ({ participants }, { payload: { id, participant } }) => ({
-      participants: Object.assign({}, participants, {
-        [id]: participant
-      })
+      participants: Object.assign({}, participants, { [id]: participant })
     }),
     'matched': (_, { payload: {
-      allo_temp, members, now_round, pair_id,
-      point, results, role, state
+      inv_temp, res_temp, members, pair_round, pair_id, point, results, role, pair_state
     } }) => ({
-      allo_temp, members, now_round, pair_id,
-      point, results, role, state
+      inv_temp, res_temp, members, pair_round, pair_id, point, results, role, pair_state
     }),
-    [submitAlloTemp]: ({ change_count }, { payload }) => ({ allo_temp: payload, change_count: change_count + 1}),
-    'change allo_temp': ({ change_count }, { payload })=> ({ allo_temp: payload, change_count: change_count + 1}), 
-    [finishAllocating]: (_, { payload }) => ({ state: "judging", allo_temp: payload}),
-    'finish allocating': (_, { payload }) => ({ state: "judging", allo_temp: payload}),
-    [responseOK]: ( {now_round, game_round, state, point, role, allo_temp },
-      { payload: { value: value } }) => ({
-      state: (now_round < game_round)? "allocating" : "finished",
-      now_round: (now_round < game_round)? now_round+1 : now_round,
-      role: (role == "responder")? "dictator" : "responder",
-      point: point + 1000 - value,
-      allo_result: allo_temp,
-      allo_temp: 100 * Math.round(10* Math.random()),
-      responseOK: true,
-      change_count: 0,
+
+    [syncInvTemp]: (_, { payload }) => ({ inv_temp: payload }),
+    'sync inv_temp': (_, { payload }) => ({ inv_temp: payload }),
+    [finishInvesting]: (_, { payload }) => ({ pair_state: "responding", inv_final: payload }),
+    'finish investing': (_, { payload }) => ({ pair_state: "responding", inv_final: payload }),
+    [finishResponding]: ({ point, game_rate, game_round, pair_round, inv_final }, { payload }) => ({
+      pair_state: pair_round < game_round? "investing" : "finished",
+      pair_round: pair_round < game_round? pair_round+1 : pair_round,
+      role: pair_round < game_round? "investor" : "responder",
+      point: point + (inv_final*game_rate) - payload,
     }),
-    'response ok': ({now_round, game_mode,
-      game_round, state, point,
-      role, allo_temp}, { payload }) => ({
-      state: (now_round < game_round)? "allocating" : "finished",
-      now_round: (now_round < game_round)? now_round+1 : now_round,
-      role: (role == "responder")? ((game_mode == "ultimatum")? "proposer": "dictator") : "responder",
+    'finish responding': ({ point, game_rate, game_round, pair_round }, { payload }) => ({
+      pair_state: pair_round < game_round? "investing" : "finished",
+      pair_round: pair_round < game_round? pair_round+1 : pair_round,
+      role: pair_round < game_round? "responder" : "investor",
       point: point + payload,
-      allo_result: allo_temp,
-      allo_temp: 100 * Math.round(10* Math.random()),
-      responsedOK: true,
-      change_count: 0,
     }),
-    [fallSnackBarFlags]: ({ state }) => ({
-      responsedOK: false,
-      responseOK: false,
-      changeRole: state == "allocating",
-    }),
-    [fallSnackBarFlags2]: ({}) => ({changeRole: false}),
+    [syncResTemp]: (_, { payload }) => ({ res_temp: payload }),
+    'sync res_temp': (_, { payload }) => ({ res_temp: payload }),
+
+    [fallSnackBarFlags]: ({ pair_state }) => ({ change_role_flag: pair_state == "investing" }),
+    [fallSnackBarFlags2]: ({}) => ({ change_role_flag: false }),
     [changeChartRound]: (_, { payload }) => ({ chart_round: payload, chart_button: true }),
     [fallChartButton]: () => ({ chart_button: false}),
-    'change page': (_, { payload }) => ({ page: payload }),
-    'change game_round': (_, { payload }) => ({ game_round: payload }),
   }, initialState),
   handleAction('update contents', () => ({ loading: false }), { loading: true })
 ])

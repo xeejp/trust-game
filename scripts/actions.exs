@@ -1,15 +1,32 @@
-defmodule DictaorGame.Actions do
-  alias DictaorGame.Participant
-  alias DictaorGame.Host
+defmodule TrustGame.Actions do
+  alias TrustGame.Participant
+  alias TrustGame.Host
 
+  require Logger
+  # Host
   def reseted(data) do
     host_action = get_action("reseted", %{participants: data.participants})
     action = get_action("reseted", nil)
     format(data, host_action, dispatch_to_all(data, action))
   end
 
-  def change_page(data, page) do
-    action = get_action("change page", page)
+  def change_page(data, game_page) do
+    action = get_action("change page", game_page)
+    format(data, nil, dispatch_to_all(data, action))
+  end
+
+  def change_game_round(data, game_round) do
+    action = get_action("change game_round", game_round)
+    format(data, nil, dispatch_to_all(data, action))
+  end
+
+  def change_game_point(data, game_point) do
+    action = get_action("change game_point", game_point)
+    format(data, nil, dispatch_to_all(data, action))
+  end
+
+  def change_game_rate(data, game_rate) do
+    action = get_action("change game_rate", game_rate)
     format(data, nil, dispatch_to_all(data, action))
   end
 
@@ -24,49 +41,31 @@ defmodule DictaorGame.Actions do
     format(data, nil, dispatch_to_all(data, action))
   end
 
-  def change_game_round(data, game_round) do
-    action = get_action("change game_round", game_round)
-    format(data, nil, dispatch_to_all(data, action))
-  end
-
-  def change_allo_temp(data, id, allo_temp) do
-    pair_id = get_in(data, [:participants, id, :pair_id])
-    members = get_in(data, [:pairs, pair_id, :members])
-    target_id = case members do
-      [^id, target_id] -> target_id
-      [target_id, ^id] -> target_id
-    end
-    action = get_action("change allo_temp", allo_temp)
+  # Participant
+  def sync_inv_temp(data, target_id, inv_temp) do
+    action = get_action("sync inv_temp", inv_temp)
     format(data, nil, dispatch_to(target_id, action))
   end
 
-  def finish_allocating(data, id, allo_temp) do
-    pair_id = get_in(data, [:participants, id, :pair_id])
-    members = get_in(data, [:pairs, pair_id, :members])
-    target_id = case members do
-      [^id, target_id] -> target_id
-      [target_id, ^id] -> target_id
-    end
-    host_action = get_action("finish allocating", pair_id)
-    target_action = get_action("finish allocating", allo_temp)
-    format(data, host_action, dispatch_to(target_id, target_action))
+  def finish_investing(data, pair_id, target_id, inv_final) do
+    host_action = get_action("finish investing", target_id)
+    target_action = get_action("finish investing", inv_final)
+    format(data, nil, dispatch_to(target_id, target_action))
   end
 
-  def response_ok(data, id, result) do
-    pair_id = get_in(data, [:participants, id, :pair_id])
-    members = get_in(data, [:pairs, pair_id, :members])
-    target_id = case members do
-      [^id, target_id] -> target_id
-      [target_id, ^id] -> target_id
-    end
-    ultimatum_results = get_in(data, [:ultimatum_results])
-    dictator_results = get_in(data, [:dictator_results])
-    host_action = get_action("push results", %{
-      id: id, target_id: target_id, pair_id: pair_id, result: result,
-      dictator_results: dictator_results
+  def sync_res_temp(data, target_id, res_temp) do
+    action = get_action("sync res_temp", res_temp)
+    format(data, nil, dispatch_to(target_id, action))
+  end
+
+  def finish_responding(data, pair_id, id, target_id, res_final) do
+    Logger.debug("[bbbbbbbb]")
+    trust_results = get_in(data, [:trust_results])
+    host_action = get_action("finish responding", %{
+      id: id, target_id: target_id, pair_id: pair_id, res_final: res_final, trust_results: trust_results
     })
-    target_action = get_action("response ok", get_in(result, ["value"]))
-    format(data, host_action, dispatch_to(target_id, target_action)) 
+    target_action = get_action("finish responding", res_final)
+    format(data, nil, dispatch_to(target_id, target_action))
   end
 
   def show_results(data, results) do

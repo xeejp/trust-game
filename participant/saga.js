@@ -2,11 +2,10 @@ import { put, take, call, select, fork } from 'redux-saga/effects'
 
 import {
   fetchContents,
-  finishAllocating,
-  changeNowRound,
-  submitAlloTemp,
-  changeAlloTemp,
-  responseOK,
+  syncInvTemp,
+  finishInvesting,
+  syncResTemp,
+  finishResponding,
 } from './actions.js'
 
 function* fetchContentsSaga() {
@@ -16,32 +15,39 @@ function* fetchContentsSaga() {
   }
 }
 
-function* finishAllocatingSaga() {
+function* syncInvTempSaga() {
   while(true) {
-    const { payload } = yield take(`${finishAllocating}`)
-    sendData('FINISH_ALLOCATING', payload)
+    const { payload } = yield take(`${syncInvTemp}`)
+    sendData('SYNC_INV_TEMP', payload)
   }
 }
 
-function* responseOKSaga() {
+function* finishInvestingSaga() {
   while(true) {
-    const { payload } = yield take(`${responseOK}`)
-    sendData('RESPONSE_OK', payload)
+    const { payload } = yield take(`${finishInvesting}`)
+    sendData('FINISH_INVESTING', payload)
+  }
+}
+function* syncResTempSaga() {
+  while(true) {
+    const { payload } = yield take(`${syncResTemp}`)
+    sendData('SYNC_RES_TEMP', payload)
   }
 }
 
-function* changeAlloTempSaga() {
+function* finishRespondingSaga() {
   while(true) {
-    const { payload } = yield take(`${submitAlloTemp}`)
-    sendData('CHANGE_ALLO_TEMP', payload)
+    const { payload } = yield take(`${finishResponding}`)
+    sendData('FINISH_RESPONDING', payload)
   }
 }
 
 function* saga() {
   yield fork(fetchContentsSaga)
-  yield fork(finishAllocatingSaga)
-  yield fork(changeAlloTempSaga)
-  yield fork(responseOKSaga)
+  yield fork(syncInvTempSaga)
+  yield fork(finishInvestingSaga)
+  yield fork(syncResTempSaga)
+  yield fork(finishRespondingSaga)
 }
 
 export default saga

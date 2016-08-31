@@ -1,31 +1,3 @@
-export function getPageName(page) {
-  switch(page) {
-    case 'waiting'    : return "待機"
-    case 'description': return "説明"
-    case 'experiment' : return "実験"
-    case 'result'     : return "結果"
-  }
-}
-
-export function getRoleName(role) {
-  switch(role) {
-    case "visitor"  : return "見学者"
-    case "dictator" : return "独裁者"
-    case "responder": return "受け手"
-  }
-}
-
-export function getStateName(state) {
-  switch(state) {
-    case "allocating": return "配分中"
-    case "judging"   : return "判定中"
-    case "finished"  : return "終了"
-  }
-}
-
-export const game_modes = [
-  "dictator"
-]
 export const pages = [
   "waiting",
   "description",
@@ -33,14 +5,27 @@ export const pages = [
   "result"
 ]
 
-export const roles = [
-  "visitor",
-  "dictator",
-  "responder"
-]
+export function getPageName(page) {
+  switch(pages.indexOf(page)) {
+    case 0: return "待機"
+    case 1: return "説明"
+    case 2: return "実験"
+    case 3: return "結果"
+  }
+}
 
-export const states = [
-  "allocating",
-  "judging",
-  "finished"
-]
+export function getRoleName(role) {
+  switch(role) {
+    case "visitor"  : return "見学者"
+    case "investor" : return "投資者"
+    case "responder": return "応答者"
+  }
+}
+
+export function getStateName(state) {
+  switch(state) {
+    case "investing" : return "投資中"
+    case "responding": return "応答中"
+    case "finished"  : return "終了"
+  }
+}

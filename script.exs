@@ -1,4 +1,4 @@
-defmodule DictaorGame do
+defmodule TrustGame do
   use Xee.ThemeScript
   require Logger
 
@@ -7,10 +7,10 @@ defmodule DictaorGame do
   require_file "scripts/participant.exs"
   require_file "scripts/actions.exs"
 
-  alias DictaorGame.Host
-  alias DictaorGame.Participant
-  alias DictaorGame.Main
-  alias DictaorGame.Actions
+  alias TrustGame.Host
+  alias TrustGame.Participant
+  alias TrustGame.Main
+  alias TrustGame.Actions
 
   # Callbacks
   def script_type do
@@ -21,12 +21,14 @@ defmodule DictaorGame do
 
   def init do
     {:ok, %{"data" => %{
-        page: "waiting",
+        game_page: "waiting",
         game_round: 1,
+        game_point: 10,
+        game_rate: 3,
         game_progress: 0,
         participants: %{},
         pairs: %{},
-        dictator_results: %{},
+        trust_results: %{},
       }
     }}
   end
@@ -47,7 +49,7 @@ defmodule DictaorGame do
   
   # Host router
   def handle_received(data, %{"action" => action, "params" => params}) do
-    Logger.debug("[Dictaor Game] #{action} #{inspect params}")
+    Logger.debug("[Trust Game] #{action} #{inspect params}")
     result = case {action, params} do
       {"FETCH_CONTENTS", _} -> Host.fetch_contents(data)
       {"SYNC_GAME_PROGRESS", game_progress} -> Host.sync_game_progress(data, game_progress)
@@ -64,12 +66,13 @@ defmodule DictaorGame do
 
   # Participant router
   def handle_received(data, %{"action" => action, "params" => params}, id) do
-    Logger.debug("[Ultimatum Game] #{action} #{inspect params}")
+    Logger.debug("[Trust Game] #{action} #{inspect params}")
     result = case {action, params} do
       {"FETCH_CONTENTS", _} -> Participant.fetch_contents(data, id)
-      {"FINISH_ALLOCATING", allo_temp} -> Participant.finish_allocating(data, id, allo_temp)
-      {"CHANGE_ALLO_TEMP", allo_temp} -> Participant.change_allo_temp(data, id, allo_temp)
-      {"RESPONSE_OK", result} -> Participant.response_ok(data, id, result)
+      {"SYNC_INV_TEMP", inv_temp} -> Participant.sync_inv_temp(data, id, inv_temp)
+      {"FINISH_INVESTING", inv_final} -> Participant.finish_investing(data, id, inv_final)
+      {"SYNC_RES_TEMP", res_temp} -> Participant.sync_res_temp(data, id, res_temp)
+      {"FINISH_RESPONDING", res_final} -> Participant.finish_responding(data, id, res_final)
       _ -> {:ok, %{"data" => data}}
     end
     wrap_result(result)

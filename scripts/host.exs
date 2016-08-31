@@ -1,6 +1,6 @@
-defmodule DictaorGame.Host do
-  alias DictaorGame.Main
-  alias DictaorGame.Actions
+defmodule TrustGame.Host do
+  alias TrustGame.Main
+  alias TrustGame.Actions
 
   # Actions
   def fetch_contents(data) do
@@ -20,8 +20,10 @@ defmodule DictaorGame.Host do
                     end)
                     |> Enum.into(%{}),
       pairs: %{},
-      dictator_results: %{},
+      trust_results: %{},
       game_round: 1,
+      game_point: 10,
+      game_rate: 3,
     }
     |> Actions.reseted()
   end
@@ -41,10 +43,10 @@ defmodule DictaorGame.Host do
     |> Actions.show_results(results)
   end
 
-  def change_page(data, page) do
-    if page in Main.pages do
-      %{data | page: page}
-      |> Actions.change_page(page)
+  def change_page(data, game_page) do
+    if game_page in Main.pages do
+      %{data | game_page: game_page}
+      |> Actions.change_page(game_page)
     else
       data
     end
@@ -85,7 +87,7 @@ defmodule DictaorGame.Host do
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
       participants = participants
-                      |> Map.update!(id1, &updater.(&1, group, "dictator"))
+                      |> Map.update!(id1, &updater.(&1, group, "investor"))
                       |> Map.update!(id2, &updater.(&1, group, "responder"))
 
       pairs = Map.put(pairs, group, Main.new_pair(ids))

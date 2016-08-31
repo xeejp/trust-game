@@ -8,16 +8,18 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { getRoleName } from '../../util/index.js'
 
 import {
-  submitAlloTemp,
-  finishAllocating,
+  syncInvTemp,
+  finishInvesting,
 } from '../actions.js'
 
-const mapStateToProps = ({ allo_temp, role }) => ({
-  allo_temp,
+const mapStateToProps = ({ role, inv_temp, game_point, game_rate }) => ({
   role,
+  inv_temp,
+  game_point,
+  game_rate,
 })
 
-class Allocating extends Component {
+class Investing extends Component {
   constructor() {
     super()
     this.handleThinking = this.handleThinking.bind(this)
@@ -26,39 +28,43 @@ class Allocating extends Component {
 
   handleThinking = (event, value) => {
     const { dispatch } = this.props
-    dispatch(submitAlloTemp(value))
+    dispatch(syncInvTemp(value))
   }
 
   handleConfirm = (event, value) => {
-    const { dispatch, allo_temp } = this.props
-    dispatch(finishAllocating(allo_temp))
+    const { dispatch, inv_temp } = this.props
+    dispatch(finishInvesting(inv_temp))
   }
 
   render() {
-    const { allo_temp, role } = this.props
+    const { role, inv_temp, game_point, game_rate } = this.props
     const style = {
       margin: 12,
     }
-    const enemy = (role == "responder")? "dictator" : "responder"
+    const enemy = (role == "responder")? "investor" : "responder"
     return (
       <div>
         <Card>
           <CardHeader
             title={"あなたは" + getRoleName(role) + "側です"}
-            subtitle={role == "responder"? getRoleName(enemy) + "が配分中。しばらくお待ちください。" : "配分してください。"}
+            subtitle={role == "responder"? getRoleName(enemy) + "が投資中。しばらくお待ちください。" : "投資してください。"}
           />
           <CardText>
-            <p>あなたへの配分: {role == "responder"? 1000 - allo_temp : allo_temp}  {getRoleName(enemy)}への配分: {role == "responder"? allo_temp : 1000 - allo_temp}</p>
+            {role == "investor"?
+              <p>あなたに残るポイント: {inv_temp} 応答者に投資されるポイント: {game_point - inv_temp} × {game_rate} = {(game_point - inv_temp) * game_rate }</p>
+            :
+              <p>あなたに投資されるポイント: {game_point - inv_temp} × {game_rate} = {(game_point - inv_temp) * game_rate } 投資者に残るポイント: {inv_temp}</p>
+            }
             <Slider
               min={0}
-              max={1000}
-              step={100}
-              value={ role == "responder"? 1000 - allo_temp : allo_temp }
+              max={game_point}
+              step={1}
+              value={ role == "investor"? inv_temp : game_point - inv_temp }
               onChange={this.handleThinking}
               disabled={role == "responder"}
             />
             <RaisedButton
-              label="送信"
+              label="投資ポイント確定"
               primary={true}
               style={style}
               onClick={this.handleConfirm}
@@ -71,4 +77,4 @@ class Allocating extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Allocating)
+export default connect(mapStateToProps)(Investing)

@@ -21,8 +21,8 @@ import {
 } from './actions'
 
 
-const mapStateToProps = ({ page, game_round, game_progress, pairs, loading }) => ({
-  page,
+const mapStateToProps = ({ game_page, game_round, game_progress, pairs, loading }) => ({
+  game_page,
   game_round,
   game_progress,
   pairs,
@@ -36,9 +36,9 @@ class PageSteps extends React.Component {
     this.asyncTimer = setTimeout(cb, 100)
   }
 
-  handleChangePage = (page) => {
+  handleChangePage = (game_page) => {
     const { dispatch, loading } = this.props
-    dispatch(changePage(page))
+    dispatch(changePage(game_page))
     if (!loading) {
       this.Async(() => {
         dispatch(exitLoading())
@@ -47,10 +47,10 @@ class PageSteps extends React.Component {
   }
 
   handleNext = () => {
-    const { dispatch, page, loading } = this.props
+    const { dispatch, game_page, loading } = this.props
     var next = pages[0]
     for(let i = 0; i < pages.length - 1; i++){
-      if(page == pages[i]) {
+      if(game_page == pages[i]) {
         next = pages[(i + 1) % pages.length]
         break
       }
@@ -64,10 +64,10 @@ class PageSteps extends React.Component {
   };
 
   handlePrev = () => {
-    const { dispatch, page, loading} = this.props
+    const { dispatch, game_page, loading} = this.props
     let prev = pages[0]
     for(let i = 1; i < pages.length; i++){
-      if(page == pages[i]) {
+      if(game_page == pages[i]) {
         prev = pages[(i - 1) % pages.length]
         break
       }
@@ -80,9 +80,9 @@ class PageSteps extends React.Component {
     }
   }
 
-  getStepContent(page) {
+  getStepContent(game_page) {
     const {game_round, pairs, game_progress } = this.props
-    switch (page) {
+    switch (game_page) {
       case 0:
         return (
           <div>
@@ -125,7 +125,7 @@ class PageSteps extends React.Component {
   }
 
   render() {
-    const { page, loading } = this.props
+    const { game_page, loading } = this.props
     const buttons = []
     for (let i = 0; i < pages.length; i ++) {
       buttons[i] = (
@@ -138,12 +138,12 @@ class PageSteps extends React.Component {
     }
     return (
       <div style={{width: '100%',  margin: 'auto'}}>
-      <Stepper activeStep={pages.indexOf(page)} linear={false}>
+      <Stepper activeStep={pages.indexOf(game_page)} linear={false}>
         {buttons}
       </Stepper>
       {this.renderButtons()}
       <ExpandTransition loading={loading} open={true} transitionDuration={300}>
-        <div style={{margin: '8px 20px'}}>{this.getStepContent(pages.indexOf(page))}</div>
+        <div style={{margin: '8px 20px'}}>{this.getStepContent(pages.indexOf(game_page))}</div>
       </ExpandTransition>
       </div>
     );

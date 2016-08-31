@@ -35,8 +35,8 @@ const UsersList = ({participants, openParticipantPage }) => (
   </table>
 )
 
-const Pair = ({ id, now_round, state, game_round }) => (
-  <tr><td>{id}</td><td>{now_round} / {game_round}</td><td>{getStateName(state)}</td></tr>
+const Pair = ({ id, pair_round, pair_state, game_round }) => (
+  <tr><td>{id}</td><td>{pair_round} / {game_round}</td><td>{getStateName(pair_state)}</td></tr>
 )
 
 const Pairs = ({ pairs, participants, game_round}) => (
@@ -48,8 +48,8 @@ const Pairs = ({ pairs, participants, game_round}) => (
           <Pair
             key={id}
             id={id}
-            now_round={pairs[id].now_round}
-            state={pairs[id].state}
+            pair_round={pairs[id].pair_round}
+            pair_state={pairs[id].pair_state}
             game_round={game_round}
           />
         ))

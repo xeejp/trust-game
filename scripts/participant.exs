@@ -1,86 +1,102 @@
-defmodule DictaorGame.Participant do
-  alias DictaorGame.Actions
+defmodule TrustGame.Participant do
+  alias TrustGame.Actions
 
+  require Logger
   # Actions
   def fetch_contents(data, id) do
     Actions.update_participant_contents(data, id)
   end
 
-  def change_allo_temp(data, id, allo_temp) do
+  def sync_inv_temp(data, id, inv_temp) do
     pair_id = get_in(data, [:participants, id, :pair_id])
-    "allocating" = get_in(data, [:pairs, pair_id, :state])
-    Actions.change_allo_temp(data, id, allo_temp)
+    target_id = getTargetId(data, id)
+    if "investing" == get_in(data, [:pairs, pair_id, :pair_state]) do
+      Actions.sync_inv_temp(data, target_id, inv_temp)
+    else
+      data
+    end
   end
 
-  def finish_allocating(data, id, allo_temp) do
+  def finish_investing(data, id, inv_final) do
     pair_id = get_in(data, [:participants, id, :pair_id])
-    put_in(data, [:pairs, pair_id, :state], "judging")
-    |> Actions.finish_allocating(id, allo_temp)
+    target_id = getTargetId(data, id)
+    if "investing" == get_in(data, [:pairs, pair_id, :pair_state]) do
+      put_in(data, [:pairs, pair_id, :pair_state], "responding")
+      put_in(data, [:pairs, pair_id, :inv_final], inv_final)
+      |> Actions.finish_investing(pair_id, target_id, inv_final)
+    else
+      data
+    end
   end
 
-  def get_next_role(role) do
+  def sync_res_temp(data, id, res_temp) do
+    pair_id = get_in(data, [:participants, id, :pair_id])
+    target_id = getTargetId(data, id)
+    if "responding" == get_in(data, [:pairs, pair_id, :pair_state]) do
+      Actions.sync_res_temp(data, target_id, res_temp)
+    else
+      data
+    end
+  end
+
+  def finish_responding(data, id, res_final) do
+    Logger.debug("[aaaaaaa]")
+    game_point = get_in(data, [:game_point])
+    game_rate = get_in(data, [:game_rate])
+    pair_id = get_in(data, [:participants, id, :pair_id])
+    pair_round = get_in(data, [:pairs, pair_id, :pair_round])
+    inv_final = get_in(data, [:pairs, pair_id, :inv_final])
+    target_id = getTargetId(data, id)
+    next_state = case get_in(data, [:pairs, pair_id, :pair_round]) < get_in(data, [:game_round]) do
+      true -> "investing"
+      false -> "finished"
+    end
+    if "responding" == get_in(data, [:pairs, pair_id, :pair_state]) do
+      put_in(data, [:pairs, pair_id, :pair_state], next_state)
+      |> put_in([:pairs, pair_id, :pair_round], getNextPairRound(data, pair_id))
+      |> put_in([:participants, id, :role], getNextRole(get_in(data, [:participants, id, :role])))
+      |> put_in([:participants, target_id, :role], getNextRole(get_in(data, [:participants, target_id, :role])))
+      |> put_in([:participants, id, :point], game_point - res_final + get_in(data, [:participants, id, :point]))
+      |> put_in([:participants, target_id, :point], res_final + get_in(data, [:participants, target_id, :point]))
+      |> put_in([:trust_results], Map.merge(get_in(data, [:trust_results]), %{
+        Integer.to_string(pair_round) => Map.merge(get_in(data, [:trust_results,
+           Integer.to_string(pair_round)]) || %{}, %{
+          pair_id => %{
+            hold:   inv_final*game_rate - res_final,
+            return: res_final,
+          }
+        })
+      }))
+      |> Actions.finish_responding(id, pair_id, target_id, res_final)
+    else
+      Logger.debug("[ccccccccccc?]")
+      data
+    end
+  end
+
+  def getNextRole(role) do
     case role == "responder" do
-      true -> "dictator"
+      true -> "investor"
       false -> "responder"
     end
   end
 
-  def response(data, id, result) do
-    value = get_in(result, ["value"])
-    change_count = get_in(result, ["change_count"])
-    now_round = get_in(result, ["now_round"])
+  def getTargetId(data, id) do
     pair_id = get_in(data, [:participants, id, :pair_id])
-    game_round = get_in(data, [:game_round])
     members = get_in(data, [:pairs, pair_id, :members])
     target_id = case members do
       [^id, target_id] -> target_id
       [target_id, ^id] -> target_id
     end
-    id_role = get_in(data, [:participants, id, :role])
-    target_id_role = get_in(data, [:participants, target_id, :role])
-    id_point = get_in(data, [:participants, id, :point])
-    target_id_point = get_in(data, [:participants, target_id, :point])
-    put_in(data, [:participants, id, :role], get_next_role(id_role))
-    |> put_in([:participants, target_id, :role], get_next_role(target_id_role))
-    |> put_in([:participants, id, :point],
-      case id_role == "responder" do
-         true -> id_point + (1000 - value)
-         false -> id_point + value
-      end
-    )
-    |> put_in([:participants, target_id, :point],
-      case target_id_role == "responder" do
-         true -> target_id_point + (1000 - value)
-         false -> target_id_point + value
-      end
-    )
-    |> put_in([:pairs, pair_id, :redo_count], 0)
-    |> put_in([:pairs, pair_id, :state],
-     case now_round < game_round do
-       true -> "allocating"
-       false -> "finished"
-     end
-    )
-    |> put_in([:pairs, pair_id, :now_round],
-    case now_round < game_round do
-      true -> now_round + 1
-      false -> now_round
-    end
-    )
-    |> put_in([:dictator_results], Map.merge( get_in(data, [:dictator_results]), %{
-      Integer.to_string(now_round) => Map.merge( get_in(data, [:dictator_results,
-         Integer.to_string(now_round)]) || %{}, %{
-        pair_id => %{
-            value: value,
-            change_count: change_count,
-          }
-       })
-    }))
   end
 
-  def response_ok(data, id, result) do
-    response(data, id, result)
-    |> Actions.response_ok(id, result)
+  def getNextPairRound(data, pair_id) do
+    game_round = get_in(data, [:game_round])
+    pair_round = get_in(data, [:pairs, pair_id, :pair_round])
+    case pair_round < game_round do
+      true -> pair_id + 1
+      false -> pair_id
+    end
   end
 
 
@@ -88,8 +104,10 @@ defmodule DictaorGame.Participant do
 
   def format_data(data) do
     %{
-      page: data.page,
+      game_page: data.game_page,
       game_round: data.game_round,
+      game_point: data.game_point,
+      game_rate: data.game_rate,
       game_progress: data.game_progress,
     }
   end
@@ -97,9 +115,11 @@ defmodule DictaorGame.Participant do
   def format_pair(pair) do
     %{
       members: pair.members,
-      now_round: pair.now_round,
-      allo_temp: pair.allo_temp,
-      state: pair.state,
+      pair_round: pair.pair_round,
+      inv_temp: pair.inv_temp,
+      inv_final: pair.inv_final,
+      res_temp: pair.res_temp,
+      pair_state: pair.pair_state,
     }
   end
 

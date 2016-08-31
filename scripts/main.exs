@@ -1,8 +1,8 @@
-defmodule DictaorGame.Main do
+defmodule TrustGame.Main do
 
   @pages ["waiting", "description", "experiment", "result"]
-  @roles ["visitor", "dictator", "responder"]
-  @states ["allocating", "judging", "finished"]
+  @roles ["visitor", "investor", "responder"]
+  @states ["investing", "responding", "finished"]
 
   def pages, do: @pages
   def roles, do: @roles
@@ -26,9 +26,12 @@ defmodule DictaorGame.Main do
   def new_pair(members) do
     %{
       members: members,
-      now_round: 1,
-      allo_temp: Enum.random(0..10) * 100,
-      state: "allocating",
+      pair_round: 1,
+      inv_temp: 0,
+      inv_final: nil,
+      res_temp: 0,
+      res_final: nil,
+      pair_state: "investing",
     }
   end
 end

@@ -40,7 +40,7 @@ class App extends Component {
       <div>
         <PageSteps />
         <Users />
-        <ThrottledChart />
+        {/*<ThrottledChart />*/}
         <Settings />
       </div>
     )

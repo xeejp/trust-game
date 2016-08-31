@@ -4,14 +4,13 @@ import { connect } from 'react-redux'
 import Chip from 'material-ui/chip'
 import Snackbar from 'material-ui/Snackbar'
 
-import Allocating from './componets/Allocating.js'
-import Judging from './componets/Judging.js'
 import Finished from './componets/Finished.js'
+import Investing from './componets/Investing.js'
+import Responding from './componets/Responding.js'
 
 import {
   fallSnackBarFlags,
   fallSnackBarFlags2,
-  fallSnackBarFlags3,
 } from './actions.js'
 
 import {
@@ -19,19 +18,15 @@ import {
 } from 'util/index'
 
 const mapStateToProps = ({
-  state, role, allo_result,
-  game_round, now_round,
+  pair_state, role, allo_result,
+  game_round, pair_round,
   point, game_progress,
-  responsedOK, responseOK,
-  responsedNG, responseNG,
-  changeRole,
+  change_role_flag,
 }) => ({
-  state, role, allo_result,
-  game_round, now_round,
+  pair_state, role, allo_result,
+  game_round, pair_round,
   point, game_progress,
-  responsedOK, responseOK, 
-  responsedNG, responseNG,
-  changeRole,
+  change_role_flag,
 })
 
 const styles = {
@@ -72,12 +67,12 @@ class Respond extends Component {
   }
 
   renderContents () {
-    const { state } = this.props
-    switch(state) {
-      case "allocating":
-        return <Allocating />
-      case "judging":
-        return <Judging />
+    const { pair_state } = this.props
+    switch(pair_state) {
+      case "investing":
+        return <Investing />
+      case "responding":
+        return <Responding />
       case "finished":
         return  <Finished />
     }
@@ -86,45 +81,27 @@ class Respond extends Component {
   render() {
     const {
       role, game_round,
-      now_round, point,
+      pair_round, point,
       game_progress, allo_result,
-      responsedOK, responseOK,
-      responsedNG, responseNG,
-      changeRole, state,
+      change_role_flag, pair_state,
     } = this.props
     return (
       role != "visitor"?
         <div>
-        { state != "finished"?
+        { pair_state != "finished"?
             <span>
-              <Chip style={styles.chip1}>ラウンド: {now_round} / {game_round}</Chip>
-              <Chip style={styles.chip1}>{(game_round - now_round) == 0? "最後のラウンド": "残り役割交代: " + (game_round - now_round) + "回"}</Chip>
+              <Chip style={styles.chip1}>ラウンド: {pair_round} / {game_round}</Chip>
+              <Chip style={styles.chip1}>{(game_round - pair_round) == 0? "最後のラウンド": "残り役割交代: " + (game_round - pair_round) + "回"}</Chip>
             </span>
-          : <span />
-        }
-        { state == "finished"?
-            <span><Chip style={styles.chip2}>参加者全体の進捗: {Math.round(game_progress)} %</Chip></span>
-          : <span />
+          : <Chip style={styles.chip2}>参加者全体の進捗: {Math.round(game_progress)} %</Chip>
         }
         <Chip style={styles.chip2}>ポイント: {point}</Chip>
         <div style={styles.contents}>{this.renderContents()}</div>
           <Snackbar
-            open={changeRole}
+            open={change_role_flag}
             message={"役割交換によりあなたは" + getRoleName(role) + "になりました。"}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose2}
-          />
-          <Snackbar
-            open={responsedOK}
-            message={"さきほどの提案は承認されました。" + allo_result + "ポイント獲得しました。"}
-            autoHideDuration={4000}
-            onRequestClose={this.handleRequestClose}
-          />
-          <Snackbar
-            open={responseOK}
-            message={"提案を承認しました。" + (1000 - allo_result) + "ポイント獲得しました。"}
-            autoHideDuration={4000}
-            onRequestClose={this.handleRequestClose}
           />
         </div>
       :

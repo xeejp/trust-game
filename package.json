@@ -1,5 +1,5 @@
 {
-  "name": "dictator-game",
+  "name": "trust-game",
   "version": "1.0.0",
   "dependencies": {
     "babel-polyfill": "^6.8.0",
@@ -32,12 +32,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xeejp/dictator-game.git"
+    "url": "git+https://github.com/xeejp/trust-game.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xeejp/dictator-game/issues"
+    "url": "https://github.com/xeejp/trust-game/issues"
   },
-  "homepage": "https://github.com/xeejp/dictator-game#readme",
+  "homepage": "https://github.com/xeejp/trust-game#readme",
   "description": ""
 }

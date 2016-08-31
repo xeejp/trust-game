@@ -10,9 +10,9 @@ import Toggle from 'material-ui/Toggle';
 
 import { changeGameRound } from './actions.js'
 
-const mapStateToProps = ({ game_round, page }) => ({
+const mapStateToProps = ({ game_round, game_page }) => ({
   game_round,
-  page,
+  game_page,
 })
 
 const styles = {
@@ -76,7 +76,7 @@ class ExperimentSetting extends Component {
   }
 
   render() {
-    const { page } = this.props
+    const { game_page } = this.props
     const { game_round_temp } = this.state
     const actions = [
       <FlatButton
@@ -93,7 +93,7 @@ class ExperimentSetting extends Component {
 
     return (
       <span>
-        { page == "waiting"?
+        { game_page == "waiting"?
           <RaisedButton label="実験設定"
             onTouchTap={this.handleOpen}
             style={{marginRight: "12px"}}
