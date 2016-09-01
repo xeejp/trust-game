@@ -63,19 +63,21 @@ const reducer = concatenateReducers([
 
     [syncInvTemp]: (_, { payload }) => ({ inv_temp: payload }),
     'sync inv_temp': (_, { payload }) => ({ inv_temp: payload }),
-    [finishInvesting]: (_, { payload }) => ({ pair_state: "responding", inv_final: payload }),
-    'finish investing': (_, { payload }) => ({ pair_state: "responding", inv_final: payload }),
+    [finishInvesting]: (_, { payload }) => ({ pair_state: "responding", inv_final: payload, inv_temp: 0, }),
+    'finish investing': (_, { payload }) => ({ pair_state: "responding", inv_final: payload, inv_temp: 0, }),
     [finishResponding]: ({ point, game_rate, game_round, pair_round, inv_final }, { payload }) => ({
       pair_state: pair_round < game_round? "investing" : "finished",
       pair_round: pair_round < game_round? pair_round+1 : pair_round,
       role: pair_round < game_round? "investor" : "responder",
       point: point + (inv_final*game_rate) - payload,
+      res_temp: 0,
     }),
     'finish responding': ({ point, game_rate, game_point, game_round, pair_round, inv_final }, { payload }) => ({
       pair_state: pair_round < game_round? "investing" : "finished",
       pair_round: pair_round < game_round? pair_round+1 : pair_round,
       role: pair_round < game_round? "responder" : "investor",
       point: point + game_point - inv_final + payload,
+      res_temp: 0,
     }),
     [syncResTemp]: (_, { payload }) => ({ res_temp: payload }),
     'sync res_temp': (_, { payload }) => ({ res_temp: payload }),

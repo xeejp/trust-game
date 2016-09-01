@@ -14,20 +14,21 @@ import LeftIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-left'
 import { fallChartButton, changeChartRound } from 'host/actions.js'
 
 function compCate(results, round) {
-  const keys = results[round]? Object.keys(results[round]) : [] // [1, 2, ...pair_id]
-  return keys.sort((a, b) => (results[round][a]["hold"] + results[round][a]["return"]
-    - results[round][b]["hold"] + results[round][b]["return"]))
+  const keys = results[round]? Object.keys(results[round]) : []
+  return keys.sort((a, b) => (results[round][b]["hold"] + results[round][b]["return"])
+    - (results[round][a]["hold"] + results[round][a]["return"]))
 }
 
 function compData(categories, results, round) {
-  const hold_values = results[round]? Array.from(categories).map(pair_id =>
+  const keys = results[round]? Object.keys(results[round]) : []
+  const hold_values = results[round]? Array.from(keys).map(pair_id =>
     results[round][pair_id]? results[round][pair_id]["hold"] : 0) : []
-  const return_values = results[round]? Array.from(categories).map(pair_id =>
+  const return_values = results[round]? Array.from(keys).map(pair_id =>
     results[round][pair_id]? results[round][pair_id]["return"] : 0) : []
   return [
     {
-      name: "返却したポイント",
-      data: Array.from(categories).map(p_id => return_values[p_id]? return_values[p_id] : 0),
+      name: "返却したポイント",//[1,0]
+      data: Array.from(categories).map(p_id => (return_values[p_id]? return_values[p_id] : 0)),
       stack: "pair",
       tooltip: {
         valueSuffix: " [ポイント]"
@@ -36,7 +37,7 @@ function compData(categories, results, round) {
   ].concat([
     {
       name: "残したポイント",
-      data: Array.from(categories).map(p_id => hold_values[p_id]? hold_values[p_id] : 0),
+      data: Array.from(categories).map(p_id => (hold_values[p_id]? hold_values[p_id] : 0)),
       stack: "pair",
       tooltip: {
         valueSuffix: " [ポイント]"
@@ -46,9 +47,9 @@ function compData(categories, results, round) {
     {
       yAxis: 1,
       name: "戻された割合",
-      data: Array.from(categories).map(p_id =>
+      data: Array.from(categories).map(p_id => (
         hold_values[p_id] && return_values[p_id]?
-          Math.round(return_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0),
+          Math.round(return_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0)),
       type: "spline",
       dashStyle: "shortdot",
       tooltip: {
@@ -132,12 +133,19 @@ class Chart extends Component {
     super(props)
     const { role } = this.props
     this.handleCallback = this.handleCallback.bind(this)
+    this.handleChange = this.handleChange.bind(this)
     this.handleInc = this.handleInc.bind(this)
     this.handleDec = this.handleDec.bind(this)
     this.state = {
       expanded: Boolean(role),
       round: 1,
     }
+  }
+
+  handleChange = (index, fromIndex) => {
+    const { chart_round, dispatch } = this.props
+    const diff = index - fromIndex
+    dispatch(changeChartRound(diff + chart_round))
   }
 
   handleInc = () => {
@@ -170,11 +178,10 @@ class Chart extends Component {
     const charts = []
     for(let i = 0; i < (config? config.length : 0); i ++) {
       charts[i] = (
-        <span>
+        <div>
           <Highcharts config={config[i]} callback={this.handleCallback}></Highcharts>
-        </span>
+        </div>
       )
-      console.log(charts)
     }
     const styles = {
       mediumIcon: {
@@ -207,7 +214,7 @@ class Chart extends Component {
           showExpandableButton={true}
         />
         <CardText expandable={true}>
-          <SwipeableViews index={chart_round-1}>
+          <SwipeableViews index={chart_round-1} onChangeIndex={this.handleChange}>
             {charts}
           </SwipeableViews>
           <div>

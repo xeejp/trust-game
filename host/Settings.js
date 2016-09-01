@@ -15,7 +15,7 @@ const mapStateToProps = ({ game_round, game_rate, game_point }) => ({
 })
 
 const styles = {
-  chip: {margin: 4, float: "left"},
+  chip: {margin: 12, float: "left"},
   button: {margin: 12, clear: "both"}
 }
 
@@ -32,8 +32,8 @@ class Settings extends Component {
           />
           <CardText expandable={true}>
             <Chip style={styles.chip}>ラウンド: {game_round}</Chip>
-            <Chip style={styles.chip}>レート: {game_rate}</Chip>
-            <Chip style={styles.chip}>始めに配られるポイント: {game_point}</Chip>
+            <Chip style={styles.chip}>仲介者レート: {game_rate}</Chip>
+            <Chip style={styles.chip}>ラウンド初めに配られるポイント: {game_point}</Chip>
             <div style={styles.button}>
               <ExperimentSetting />
               <MatchingButton />

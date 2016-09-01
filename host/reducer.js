@@ -43,7 +43,7 @@ const reducer = concatenateReducers([
     }),
     'reseted': (_, { payload: { participants }}) => ({participants: participants}),
     [reset]: ({}) => ({
-      game_page: "waiting",
+      game_page: "waiting", chart_round: 1,
       game_round: 1, game_round_temp: 1,
       game_point: 10, game_point_temp: 10,
       game_rate: 3, game_rate_temp: 3,

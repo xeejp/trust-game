@@ -8,6 +8,8 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Toggle from 'material-ui/Toggle';
 
+import Counter from 'components/Counter'
+
 import { changeGameRound, changeGamePoint, changeGameRate } from './actions.js'
 
 const mapStateToProps = ({ game_round, game_page, game_point, game_rate }) => ({
@@ -145,59 +147,35 @@ class ExperimentSetting extends Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <p>ゲームのラウンド数: {game_round_temp}回 (役割交換回数: {game_round_temp-1}回)</p>
-          { game_round_temp != 1?
-            <RaisedButton
-              label="-"
-              style={styles.game_roundButton}
-              onClick={this.handleRoundDec}
-            />
-            :
-            <FlatButton
-              label="-"
-              style={styles.game_roundButton}
-            />
-          }
-          <RaisedButton
-            label="+"
-            style={styles.game_roundButton}
-            onClick={this.handleRoundInc}
+          <Counter
+            title="ゲームラウンド数"
+            value={game_round_temp}
+            min={1}
+            minTip="最小ラウンド"
+            decTip="減らす"
+            incTip="増やす"
+            incHandle={this.handleRoundInc}
+            decHandle={this.handleRoundDec}
           />
-          <p>仲介者のレート: {game_rate_temp}倍</p>
-          { game_rate_temp != 1?
-            <RaisedButton
-              label="-"
-              style={styles.game_roundButton}
-              onClick={this.handleRateDec}
-            />
-            :
-            <FlatButton
-              label="-"
-              style={styles.game_roundButton}
-            />
-          }
-          <RaisedButton
-            label="+"
-            style={styles.game_roundButton}
-            onClick={this.handleRateInc}
+          <Counter
+            title="仲介者レート"
+            value={game_rate_temp}
+            min={1}
+            minTip="最小レート"
+            decTip="減らす"
+            incTip="増やす"
+            incHandle={this.handleRateInc}
+            decHandle={this.handleRateDec}
           />
-          <p>初めに配れるポイント: {game_point_temp}ポイント</p>
-          { game_point_temp != 1?
-            <RaisedButton
-              label="-"
-              style={styles.game_roundButton}
-              onClick={this.handlePointDec}
-            />
-            :
-            <FlatButton
-              label="-"
-              style={styles.game_roundButton}
-            />
-          }
-          <RaisedButton
-            label="+"
-            style={styles.game_roundButton}
-            onClick={this.handlePointInc}
+          <Counter
+            title="ラウンド初めに配られるポイント"
+            value={game_point_temp}
+            min={1}
+            minTip="最小ポイント"
+            decTip="減らす"
+            incTip="増やす"
+            incHandle={this.handlePointInc}
+            decHandle={this.handlePointDec}
           />
         </Dialog>
       </span>
