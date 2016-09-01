@@ -2,29 +2,28 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
+import Chip from 'material-ui/chip'
 
 import Highcharts from 'react-highcharts'
-import ChartSetting from './ChartSetting.js'
+import SwipeableViews from 'react-swipeable-views';
+import { grey300 } from 'material-ui/styles/colors';
+import IconButton from 'material-ui/IconButton';
+import RightIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
+import LeftIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-left'
 
-import { fallChartButton } from 'host/actions.js'
+import { fallChartButton, changeChartRound } from 'host/actions.js'
 
 function compCate(results, round) {
   const keys = results[round]? Object.keys(results[round]) : [] // [1, 2, ...pair_id]
-  return keys.sort((a, b) => {results[round][a]["hold"] + results[round][a]["return"]
-    - results[round][b]["hold"] + results[round][b]["return"]})
+  return keys.sort((a, b) => (results[round][a]["hold"] + results[round][a]["return"]
+    - results[round][b]["hold"] + results[round][b]["return"]))
 }
 
 function compData(categories, results, round) {
-  console.log("categories = ")
-  console.log(categories)
   const hold_values = results[round]? Array.from(categories).map(pair_id =>
     results[round][pair_id]? results[round][pair_id]["hold"] : 0) : []
-  console.log("hold_values = ")
-  console.log(hold_values)
   const return_values = results[round]? Array.from(categories).map(pair_id =>
     results[round][pair_id]? results[round][pair_id]["return"] : 0) : []
-  console.log("return_values = ")
-  console.log(return_values)
   return [
     {
       name: "返却したポイント",
@@ -59,12 +58,11 @@ function compData(categories, results, round) {
   ]))
 }
 
-const mapStateToProps = ({ trust_results, chart_round, chart_button, role }) => ({
-  role,
-  trust_results,
-  chart_round,
-  chart_button,
-  config: {
+const mapStateToProps = ({ trust_results, chart_button, chart_round, role }) => {
+  console.log(trust_results)
+  const config = []
+  for(let i = 0; i < (trust_results? Object.keys(trust_results).length : 0); i ++) {
+    config[i] = {
       chart: {
          type: "column"
       },
@@ -76,7 +74,7 @@ const mapStateToProps = ({ trust_results, chart_round, chart_button, role }) => 
         text: "応答者の分配"
       },
       xAxis: {
-        categories: compCate(trust_results, chart_round),
+        categories: compCate(trust_results, i+1),
         crosshair: true,
         title: {
           text: "ペア"
@@ -116,19 +114,40 @@ const mapStateToProps = ({ trust_results, chart_round, chart_button, role }) => 
           stacking: 'normal'
         }
       },
-      series: compData(compCate(trust_results, chart_round), trust_results, chart_round),
+      series: compData(compCate(trust_results, i+1), trust_results, i+1),
     }
-})
+  }
+  return {
+    config: config,
+    max_chart_round: Object.keys(trust_results).length,
+    trust_results,
+    chart_button,
+    chart_round,
+    role
+  }
+}
 
 class Chart extends Component {
   constructor(props) {
     super(props)
     const { role } = this.props
     this.handleCallback = this.handleCallback.bind(this)
+    this.handleInc = this.handleInc.bind(this)
+    this.handleDec = this.handleDec.bind(this)
     this.state = {
       expanded: Boolean(role),
       round: 1,
     }
+  }
+
+  handleInc = () => {
+    const { chart_round, dispatch } = this.props
+    dispatch(changeChartRound(chart_round + 1))
+  }
+
+  handleDec = () => {
+    const { chart_round, dispatch } = this.props
+    dispatch(changeChartRound(chart_round - 1))
   }
 
   handleCallback = () => {
@@ -146,8 +165,35 @@ class Chart extends Component {
   }
 
   render() {
-    const { config } = this.props
-    console.log(config)
+    const { config, chart_round, max_chart_round } = this.props
+
+    const charts = []
+    for(let i = 0; i < (config? config.length : 0); i ++) {
+      charts[i] = (
+        <span>
+          <Highcharts config={config[i]} callback={this.handleCallback}></Highcharts>
+        </span>
+      )
+      console.log(charts)
+    }
+    const styles = {
+      mediumIcon: {
+        width: 48,
+        height: 48,
+      },
+      left: {
+        width: 96,
+        height: 96,
+        padding: 24,
+        float: "left",
+      },
+      right: {
+        width: 96,
+        height: 96,
+        padding: 24,
+        float: "right",
+      }
+    }
     return (
     <div id="chart">
       <Card
@@ -161,8 +207,34 @@ class Chart extends Component {
           showExpandableButton={true}
         />
         <CardText expandable={true}>
-          <Highcharts config={config} callback={this.handleCallback}></Highcharts>
-          <ChartSetting />
+          <SwipeableViews index={chart_round-1}>
+            {charts}
+          </SwipeableViews>
+          <div>
+            { chart_round != 1?
+              <IconButton iconStyle={styles.mediumIcon} style={styles.left}
+                tooltip="ラウンドを下げる" onClick={this.handleDec}>
+                <LeftIcon/>
+              </IconButton>
+            :
+              <IconButton iconStyle={styles.mediumIcon} style={styles.left}
+                tooltip="最初のラウンドです">
+                <LeftIcon color={grey300}/>
+              </IconButton>
+            }
+            { chart_round != max_chart_round?
+              <IconButton iconStyle={styles.mediumIcon} style={styles.right}
+                tooltip="ラウンドを上げる" onClick={this.handleInc} >
+                <RightIcon/>
+              </IconButton>
+            :
+              <IconButton iconStyle={styles.mediumIcon} style={styles.right}
+                tooltip="最後のラウンドです">
+                <RightIcon color={grey300}/>
+              </IconButton>
+            }
+            <Chip style={{clear: "both", margin: "auto"}}>表示ラウンド: {chart_round}</Chip>
+          </div>
         </CardText>
       </Card>
     </div>
