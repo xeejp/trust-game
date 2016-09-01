@@ -59,7 +59,8 @@ function compData(categories, results, round) {
   ]))
 }
 
-const mapStateToProps = ({ trust_results, chart_round, chart_button }) => ({
+const mapStateToProps = ({ trust_results, chart_round, chart_button, role }) => ({
+  role,
   trust_results,
   chart_round,
   chart_button,

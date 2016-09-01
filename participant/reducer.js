@@ -30,6 +30,7 @@ const initialState = {
   inv_temp: 0,
   res_temp: 0,
   inv_results: {},
+  trust_results: {},
   change_role_flag: false,
   participants_length: 0,
 }
@@ -48,8 +49,8 @@ const reducer = concatenateReducers([
     'reseted': () => ({
       game_page: "waiting", game_round: 1, game_point: 10, game_rate: 3, role: "visitor", point: 0, pair_id: null,
     }),
-    'show results': (_ , { payload: {ultimatum_results, dictator_results} }) => ({
-      dictator_results: dictator_results
+    'show results': (_ , { payload }) => ({
+      trust_results: payload,
     }),
     'join': ({ participants }, { payload: { id, participant } }) => ({
       participants: Object.assign({}, participants, { [id]: participant })

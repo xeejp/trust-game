@@ -38,10 +38,7 @@ defmodule TrustGame.Host do
   end
 
   def show_results(data, results) do
-    put_in(data, [:dictator_results],
-      get_in(results, ["dictator_results"])
-    )
-    |> Actions.show_results(results)
+    Actions.show_results(data, results)
   end
 
   def change_page(data, game_page) do
