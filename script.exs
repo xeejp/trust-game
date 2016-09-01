@@ -59,6 +59,8 @@ defmodule TrustGame do
       {"RESET", _} -> Host.reset(data)
       {"CHANGE_PAGE", page} -> Host.change_page(data, page)
       {"CHANGE_GAME_ROUND", game_round} -> Host.change_game_round(data, game_round)
+      {"CHANGE_GAME_POINT", game_point} -> Host.change_game_point(data, game_point)
+      {"CHANGE_GAME_RATE", game_rate} -> Host.change_game_rate(data, game_rate)
       _ -> {:ok, %{"data" => data}}
     end
     wrap_result(result)

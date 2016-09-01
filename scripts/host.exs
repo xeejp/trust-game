@@ -59,6 +59,18 @@ defmodule TrustGame.Host do
     |> Actions.change_game_round(game_round)
   end
 
+  def change_game_point(data, game_point) do
+    if game_point < 0 do game_point = 1 end
+    %{data | game_point: game_point}
+    |> Actions.change_game_point(game_point)
+  end
+
+  def change_game_rate(data, game_rate) do
+    if game_rate < 0 do game_rate = 1 end
+    %{data | game_rate: game_rate}
+    |> Actions.change_game_rate(game_rate)
+  end
+
   def match(data) do
     %{participants: participants} = data
     participants = participants

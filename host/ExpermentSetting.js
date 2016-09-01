@@ -8,11 +8,13 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Toggle from 'material-ui/Toggle';
 
-import { changeGameRound } from './actions.js'
+import { changeGameRound, changeGamePoint, changeGameRate } from './actions.js'
 
-const mapStateToProps = ({ game_round, game_page }) => ({
+const mapStateToProps = ({ game_round, game_page, game_point, game_rate }) => ({
   game_round,
   game_page,
+  game_point,
+  game_rate,
 })
 
 const styles = {
@@ -29,26 +31,36 @@ class ExperimentSetting extends Component {
     super()
     this.handleRoundInc = this.handleRoundInc.bind(this)
     this.handleRoundDec = this.handleRoundDec.bind(this)
+    this.handlePointInc = this.handlePointInc.bind(this)
+    this.handlePointDec = this.handlePointDec.bind(this)
+    this.handleRateInc = this.handleRateInc.bind(this)
+    this.handleRateDec = this.handleRateDec.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleConfirm = this.handleConfirm.bind(this)
     this.state = {
       open: false,
       game_round_temp: 1,
+      game_point: 10,
+      game_rate: 3,
     }
   }
   componentDidMount() {
-    const { game_round } = this.props
+    const { game_round, game_point, game_rate } = this.props
     this.setState({
       game_round_temp: game_round,
+      game_point_temp: game_point,
+      game_rate_temp: game_rate,
     })
   }
 
   handleOpen = () => {
     this.setState({open: true})
-    const { game_round } = this.props
+    const { game_round, game_rate, game_point, game_page } = this.props
     this.setState({
       game_round_temp: game_round,
+      game_point_temp: game_point,
+      game_rate_temp: game_rate,
     })
   };
 
@@ -58,8 +70,10 @@ class ExperimentSetting extends Component {
 
   handleConfirm = () => {
     const { dispatch } = this.props
-    const { game_round_temp } = this.state
+    const { game_round_temp, game_rate_temp, game_point_temp } = this.state
     dispatch(changeGameRound(game_round_temp))
+    dispatch(changeGamePoint(game_point_temp))
+    dispatch(changeGameRate(game_rate_temp))
     this.setState({open: false});
   }
 
@@ -75,9 +89,29 @@ class ExperimentSetting extends Component {
     this.setState({game_round_temp: game_round_temp - 1})
   }
 
+  handlePointInc = (event) => {
+    const { game_point_temp } = this.state
+    this.setState({game_point_temp: game_point_temp + 1})
+  }
+
+  handlePointDec = (event) => {
+    const { game_point_temp } = this.state
+    this.setState({game_point_temp: game_point_temp - 1})
+  }
+
+  handleRateInc = (event) => {
+    const { game_rate_temp } = this.state
+    this.setState({game_rate_temp: game_rate_temp + 1})
+  }
+
+  handleRateDec = (event) => {
+    const { game_rate_temp } = this.state
+    this.setState({game_rate_temp: game_rate_temp - 1})
+  }
+
   render() {
     const { game_page } = this.props
-    const { game_round_temp } = this.state
+    const { game_round_temp, game_rate_temp, game_point_temp } = this.state
     const actions = [
       <FlatButton
         label="キャンセル"
@@ -128,6 +162,42 @@ class ExperimentSetting extends Component {
             label="+"
             style={styles.game_roundButton}
             onClick={this.handleRoundInc}
+          />
+          <p>仲介者のレート: {game_rate_temp}倍</p>
+          { game_rate_temp != 1?
+            <RaisedButton
+              label="-"
+              style={styles.game_roundButton}
+              onClick={this.handleRateDec}
+            />
+            :
+            <FlatButton
+              label="-"
+              style={styles.game_roundButton}
+            />
+          }
+          <RaisedButton
+            label="+"
+            style={styles.game_roundButton}
+            onClick={this.handleRateInc}
+          />
+          <p>初めに配れるポイント: {game_point_temp}ポイント</p>
+          { game_point_temp != 1?
+            <RaisedButton
+              label="-"
+              style={styles.game_roundButton}
+              onClick={this.handlePointDec}
+            />
+            :
+            <FlatButton
+              label="-"
+              style={styles.game_roundButton}
+            />
+          }
+          <RaisedButton
+            label="+"
+            style={styles.game_roundButton}
+            onClick={this.handlePointInc}
           />
         </Dialog>
       </span>

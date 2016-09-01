@@ -8,8 +8,10 @@ import ResetButton from './ResetButton.js'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import Chip from 'material-ui/chip'
 
-const mapStateToProps = ({ game_round }) => ({
+const mapStateToProps = ({ game_round, game_rate, game_point }) => ({
   game_round,
+  game_rate,
+  game_point,
 })
 
 const styles = {
@@ -19,7 +21,7 @@ const styles = {
 
 class Settings extends Component {
   render() {
-    const { game_round } = this.props
+    const { game_round, game_rate, game_point } = this.props
     return (
       <div>
         <Card style={{margin: '16px 16px'}}>
@@ -30,6 +32,8 @@ class Settings extends Component {
           />
           <CardText expandable={true}>
             <Chip style={styles.chip}>ラウンド: {game_round}</Chip>
+            <Chip style={styles.chip}>レート: {game_rate}</Chip>
+            <Chip style={styles.chip}>始めに配られるポイント: {game_point}</Chip>
             <div style={styles.button}>
               <ExperimentSetting />
               <MatchingButton />
