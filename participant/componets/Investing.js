@@ -51,9 +51,9 @@ class Investing extends Component {
           />
           <CardText>
             {role == "investor"?
-              <p>あなたに残るポイント: {inv_temp} 応答者に投資されるポイント: {game_point - inv_temp} × {game_rate} = {(game_point - inv_temp) * game_rate }</p>
+              <p>あなたに残るポイント: {game_point - inv_temp} 応答者に投資されるポイント: {inv_temp} × {game_rate} = {inv_temp * game_rate }</p>
             :
-              <p>あなたに投資されるポイント: {game_point - inv_temp} × {game_rate} = {(game_point - inv_temp) * game_rate } 投資者に残るポイント: {inv_temp}</p>
+              <p>あなたに投資されるポイント: {inv_temp} × {game_rate} = {inv_temp * game_rate } 投資者に残るポイント: {game_point - inv_temp}</p>
             }
             <Slider
               min={0}

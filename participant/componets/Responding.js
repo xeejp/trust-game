@@ -49,24 +49,24 @@ class Responding extends Component {
           <CardText>
             {role == "responder"?
               <span>
-              <p>あなたのポイント: 投資されたポイント({inv_final}) × 仲介者の倍率({game_rate})
-                - 返却するポイント({res_temp}) = 最終的なポイント({inv_final*game_rate - res_temp})</p>
+              <p>あなたのポイント: 投資されたポイント({inv_final}) × {game_rate}
+              - 返却するポイント({res_temp}) = {inv_final*game_rate - res_temp}</p>
               <p>投資者のポイント: 初めに貰ったポイント({game_point}) - あなたに投資したポイント({inv_final})
-              + あなたが返却するポイント({res_temp}) = 最終的なポイント({game_point - inv_final + res_temp})</p>
+              + あなたが返却するポイント({res_temp}) = {game_point - inv_final + res_temp}</p>
               </span>
             :
               <span>
               <p>あなたのポイント: 初めに貰ったポイント({game_point}) - 応答者に投資したポイント({inv_final})
-              + 応答者が返却するポイント({res_temp}) = 最終的なポイント({game_point - inv_final + res_temp})</p>
-              <p>応答者のポイント: 投資されたポイント({inv_final}) × 仲介者の倍率({game_rate})
-                - あなたに返却するポイント({res_temp}) = 最終的なポイント({inv_final*game_rate - res_temp})</p>
+              + 応答者が返却するポイント({res_temp}) = {game_point - inv_final + res_temp}</p>
+              <p>応答者のポイント: 投資されたポイント({inv_final}) × {game_rate}
+                - あなたに返却するポイント({res_temp}) = {inv_final*game_rate - res_temp}</p>
               </span>
             }
             <Slider
               min={0}
               max={inv_final*game_rate}
               step={1}
-              value={ role == "responder"? res_temp : inv_final - res_temp }
+              value={ role == "responder"? res_temp : inv_final*game_rate - res_temp }
               onChange={this.handleThinking}
               disabled={role == "investor"}
             />

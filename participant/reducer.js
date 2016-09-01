@@ -70,11 +70,11 @@ const reducer = concatenateReducers([
       role: pair_round < game_round? "investor" : "responder",
       point: point + (inv_final*game_rate) - payload,
     }),
-    'finish responding': ({ point, game_rate, game_round, pair_round }, { payload }) => ({
+    'finish responding': ({ point, game_rate, game_point, game_round, pair_round, inv_final }, { payload }) => ({
       pair_state: pair_round < game_round? "investing" : "finished",
       pair_round: pair_round < game_round? pair_round+1 : pair_round,
       role: pair_round < game_round? "responder" : "investor",
-      point: point + payload,
+      point: point + game_point - inv_final + payload,
     }),
     [syncResTemp]: (_, { payload }) => ({ res_temp: payload }),
     'sync res_temp': (_, { payload }) => ({ res_temp: payload }),

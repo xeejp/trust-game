@@ -10,7 +10,7 @@ const mapStateToProps = ({}) => ({
 
 const Result = ({}) => (
   <div>
-   {/*<Chart />*/}
+   <Chart />
   </div>
 )
 

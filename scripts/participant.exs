@@ -22,8 +22,8 @@ defmodule TrustGame.Participant do
     target_id = getTargetId(data, id)
     if "investing" == get_in(data, [:pairs, pair_id, :pair_state]) do
       put_in(data, [:pairs, pair_id, :pair_state], "responding")
-      put_in(data, [:pairs, pair_id, :inv_final], inv_final)
-      |> Actions.finish_investing(pair_id, target_id, inv_final)
+      |> put_in([:pairs, pair_id, :inv_final], inv_final)
+      |> Actions.finish_investing(target_id, pair_id, inv_final)
     else
       data
     end
@@ -40,7 +40,6 @@ defmodule TrustGame.Participant do
   end
 
   def finish_responding(data, id, res_final) do
-    Logger.debug("[aaaaaaa]")
     game_point = get_in(data, [:game_point])
     game_rate = get_in(data, [:game_rate])
     pair_id = get_in(data, [:participants, id, :pair_id])
@@ -52,12 +51,13 @@ defmodule TrustGame.Participant do
       false -> "finished"
     end
     if "responding" == get_in(data, [:pairs, pair_id, :pair_state]) do
-      put_in(data, [:pairs, pair_id, :pair_state], next_state)
-      |> put_in([:pairs, pair_id, :pair_round], getNextPairRound(data, pair_id))
+      put_in(data, [:pairs, pair_id, :pair_round], getNextPairRound(data, pair_id))
       |> put_in([:participants, id, :role], getNextRole(get_in(data, [:participants, id, :role])))
       |> put_in([:participants, target_id, :role], getNextRole(get_in(data, [:participants, target_id, :role])))
-      |> put_in([:participants, id, :point], game_point - res_final + get_in(data, [:participants, id, :point]))
-      |> put_in([:participants, target_id, :point], res_final + get_in(data, [:participants, target_id, :point]))
+      |> put_in([:participants, id, :point], # id = Responder
+        inv_final*game_rate - res_final + get_in(data, [:participants, id, :point]))
+      |> put_in([:participants, target_id, :point], # target_id = Investor
+        game_point - inv_final + res_final + get_in(data, [:participants, target_id, :point]))
       |> put_in([:trust_results], Map.merge(get_in(data, [:trust_results]), %{
         Integer.to_string(pair_round) => Map.merge(get_in(data, [:trust_results,
            Integer.to_string(pair_round)]) || %{}, %{
@@ -67,9 +67,11 @@ defmodule TrustGame.Participant do
           }
         })
       }))
-      |> Actions.finish_responding(id, pair_id, target_id, res_final)
+      |> put_in([:pairs, pair_id, :pair_state], next_state)
+      |> put_in([:pairs, pair_id, :inv_temp], 0)
+      |> put_in([:pairs, pair_id, :res_temp], 0)
+      |> Actions.finish_responding(id, target_id, pair_id, res_final)
     else
-      Logger.debug("[ccccccccccc?]")
       data
     end
   end
@@ -94,8 +96,8 @@ defmodule TrustGame.Participant do
     game_round = get_in(data, [:game_round])
     pair_round = get_in(data, [:pairs, pair_id, :pair_round])
     case pair_round < game_round do
-      true -> pair_id + 1
-      false -> pair_id
+      true -> pair_round + 1
+      false -> pair_round
     end
   end
 

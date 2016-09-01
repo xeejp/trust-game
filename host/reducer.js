@@ -55,27 +55,29 @@ const reducer = concatenateReducers([
     }),
     'finish investing': ({ pairs }, { payload }) => ({
       pairs: Object.assign({}, pairs, {
-        [pair_id]: Object.assign({}, pairs[pair_id], {
+        [payload]: Object.assign({}, pairs[payload], {
           pair_state: "responding"
         })
       })
     }),
-    'finish responding': ({ game_round, game_point, game_rate, participants, pairs },
-      { payload: { id, target_id, pair_id, res_final, trust_results}}) => ({
+    'finish responding': ({ game_round, participants, pairs },
+      { payload: {id, target_id, pair_id, id_point, target_id_point, trust_results}}) => ({
       trust_results: trust_results,
       participants: Object.assign({}, participants, {
-        [id]: Object.assign({}, participants[id], {
+        [id]: Object.assign({}, participants[id], { // id = Responder
           role: pairs[pair_id].pair_round < game_round? participants[target_id].role : participants[id].role,
-          point: participants[id].point + pairs[pair_id].inv_final - res_final,
+          point: id_point,
         }),
-        [target_id]: Object.assign({}, participants[target_id], {
+        [target_id]: Object.assign({}, participants[target_id], { // target_id = Investor
           role: pairs[pair_id].pair_round < game_round? participants[id].role : participants[target_id].role,
-          point: participants[target_id].point + res_final,
+          point: target_id_point,
         })
       }),
       pairs: Object.assign({}, pairs, {
         [pair_id]: Object.assign({}, pairs[pair_id], {
-          pair_state: pairs[pair_id].pair_round < game_round? "investing" : "finished"
+          pair_state: pairs[pair_id].pair_round < game_round? "investing" : "finished",
+          pair_round: pairs[pair_id].pair_round < game_round?
+            pairs[pair_id].pair_round + 1 : pairs[pair_id].pair_round
         })
       })
     }),

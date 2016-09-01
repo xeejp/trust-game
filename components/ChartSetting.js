@@ -7,10 +7,10 @@ import Chip from 'material-ui/chip'
 
 import { changeChartRound } from 'host/actions.js'
 
-const mapStateToProps = ({ chart_round, dictator_results }) => ({
+const mapStateToProps = ({ chart_round, trust_results }) => ({
   chart_round,
-  dictator_results,
-  max_chart_round: Object.keys(dictator_results).length
+  trust_results,
+  max_chart_round: Object.keys(trust_results).length
 })
 
 const styles = {

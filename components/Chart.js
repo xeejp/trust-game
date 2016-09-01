@@ -8,18 +8,59 @@ import ChartSetting from './ChartSetting.js'
 
 import { fallChartButton } from 'host/actions.js'
 
-function compDataAccept(categories, results, round) {
-  const values = results[round]? Object.keys(results[round]).filter(id =>
-    results[round][id]? true : false).map(id =>
-      results[round][id].value) : []
-  return Array.from(categories).map(x => values.filter(y => x == y).length)
+function compCate(results, round) {
+  const keys = results[round]? Object.keys(results[round]) : [] // [1, 2, ...pair_id]
+  return keys.sort((a, b) => {results[round][a]["hold"] + results[round][a]["return"]
+    - results[round][b]["hold"] + results[round][b]["return"]})
 }
 
-const categories = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+function compData(categories, results, round) {
+  console.log("categories = ")
+  console.log(categories)
+  const hold_values = results[round]? Array.from(categories).map(pair_id =>
+    results[round][pair_id]? results[round][pair_id]["hold"] : 0) : []
+  console.log("hold_values = ")
+  console.log(hold_values)
+  const return_values = results[round]? Array.from(categories).map(pair_id =>
+    results[round][pair_id]? results[round][pair_id]["return"] : 0) : []
+  console.log("return_values = ")
+  console.log(return_values)
+  return [
+    {
+      name: "返却したポイント",
+      data: Array.from(categories).map(p_id => return_values[p_id]? return_values[p_id] : 0),
+      stack: "pair",
+      tooltip: {
+        valueSuffix: " [ポイント]"
+      }
+    }
+  ].concat([
+    {
+      name: "残したポイント",
+      data: Array.from(categories).map(p_id => hold_values[p_id]? hold_values[p_id] : 0),
+      stack: "pair",
+      tooltip: {
+        valueSuffix: " [ポイント]"
+      }
+    }
+  ].concat([
+    {
+      yAxis: 1,
+      name: "戻された割合",
+      data: Array.from(categories).map(p_id =>
+        hold_values[p_id] && return_values[p_id]?
+          Math.round(return_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0),
+      type: "spline",
+      dashStyle: "shortdot",
+      tooltip: {
+        valueSuffix: " [%]"
+      }
+    }
+  ]))
+}
 
-const mapStateToProps = ({ dictator_results, chart_round, chart_button, role}) => ({
-  dictator_results,
-  role,
+const mapStateToProps = ({ trust_results, chart_round, chart_button }) => ({
+  trust_results,
   chart_round,
   chart_button,
   config: {
@@ -31,32 +72,42 @@ const mapStateToProps = ({ dictator_results, chart_round, chart_button, role}) =
         href: 'https://xee.jp/'
       },
       title: {
-        text: "独裁者に分配されたポイント"
+        text: "応答者の分配"
       },
       xAxis: {
-        categories: categories,
+        categories: compCate(trust_results, chart_round),
         crosshair: true,
         title: {
-          text: "ポイント"
+          text: "ペア"
         },
-        labels: {
-          step: 1
+      },
+      yAxis: [
+        {
+          min: 0,
+          title: {
+            text: "ポイント"
+          },
+          labels: {
+            step: 1,
+          },
+        },
+        {
+          min: 0,
+          max: 100,
+          title: {
+            text: "戻された割合 [%]"
+          },
+          opposite: true,
         }
-      },
-      yAxis: {
-        allowDecimals: false,
-        min: 0,
-        title: {
-          text: "回数"
-        },
-        labels: {
-          step: 1,
-        },
-      },
+      ],
       tooltip: {
+        shared: true,
         formatter: function () {
-          return '<b>' + this.x + 'ポイント</b><br/>' +
-            this.series.name + ': ' + this.y
+          var line = '<b>ペアID: ' + this.x + '</b><br/>'
+          this.points.forEach(i => {
+            line += i.series.name + ': ' + i.y + '<br />'
+          })
+          return line
         }
       },
       plotOptions: {
@@ -64,13 +115,7 @@ const mapStateToProps = ({ dictator_results, chart_round, chart_button, role}) =
           stacking: 'normal'
         }
       },
-      series: [
-        {
-          name: "承認",
-          data: compDataAccept(categories, dictator_results, chart_round),
-          stack: 'dictator',
-        },
-      ]
+      series: compData(compCate(trust_results, chart_round), trust_results, chart_round),
     }
 })
 
@@ -101,6 +146,7 @@ class Chart extends Component {
 
   render() {
     const { config } = this.props
+    console.log(config)
     return (
     <div id="chart">
       <Card

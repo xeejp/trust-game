@@ -10,9 +10,13 @@ defmodule TrustGame.Host do
 
   def reset(data) do
     %{data |
+      game_page: "waiting",
+      game_round: 1,
+      game_point: 10,
+      game_rate: 3,
       participants: data.participants
                     |> Enum.map(fn({id, state}) ->
-                      {id, %{
+                      {id, %{ state |
                         role: "visitor",
                         point: 0,
                         pair_id: nil,
@@ -21,9 +25,6 @@ defmodule TrustGame.Host do
                     |> Enum.into(%{}),
       pairs: %{},
       trust_results: %{},
-      game_round: 1,
-      game_point: 10,
-      game_rate: 3,
     }
     |> Actions.reseted()
   end
@@ -62,7 +63,7 @@ defmodule TrustGame.Host do
     %{participants: participants} = data
     participants = participants
                     |> Enum.map(fn({id, state}) ->
-                      {id, %{
+                      {id, %{ state |
                         role: "visitor",
                         point: 0,
                         pair_id: nil,
@@ -74,7 +75,7 @@ defmodule TrustGame.Host do
               |> Enum.map(&elem(&1, 0)) # [id...]
               |> Enum.shuffle
               |> Enum.chunk(group_size)
-              |> Enum.map_reduce(1, fn(p, acc) -> {{Integer.to_string(acc), p}, acc + 1} end) |> elem(0) # [{0, p0}, ..., {n-1, pn-1}]
+              |> Enum.map_reduce(0, fn(p, acc) -> {{Integer.to_string(acc), p}, acc + 1} end) |> elem(0) # [{0, p0}, ..., {n-1, pn-1}]
               |> Enum.into(%{})
 
     updater = fn participant, pair_id, role ->

@@ -47,10 +47,10 @@ defmodule TrustGame.Actions do
     format(data, nil, dispatch_to(target_id, action))
   end
 
-  def finish_investing(data, pair_id, target_id, inv_final) do
-    host_action = get_action("finish investing", target_id)
+  def finish_investing(data, target_id, pair_id, inv_final) do
+    host_action = get_action("finish investing", pair_id)
     target_action = get_action("finish investing", inv_final)
-    format(data, nil, dispatch_to(target_id, target_action))
+    format(data, host_action, dispatch_to(target_id, target_action))
   end
 
   def sync_res_temp(data, target_id, res_temp) do
@@ -58,14 +58,15 @@ defmodule TrustGame.Actions do
     format(data, nil, dispatch_to(target_id, action))
   end
 
-  def finish_responding(data, pair_id, id, target_id, res_final) do
-    Logger.debug("[bbbbbbbb]")
+  def finish_responding(data, id, target_id, pair_id, res_final) do
     trust_results = get_in(data, [:trust_results])
+    id_point = get_in(data, [:participants, id, :point])
+    target_id_point = get_in(data, [:participants, target_id, :point])
     host_action = get_action("finish responding", %{
-      id: id, target_id: target_id, pair_id: pair_id, res_final: res_final, trust_results: trust_results
+      id: id, target_id: target_id, pair_id: pair_id, id_point: id_point, target_id_point: target_id_point, trust_results: trust_results
     })
     target_action = get_action("finish responding", res_final)
-    format(data, nil, dispatch_to(target_id, target_action))
+    format(data, host_action, dispatch_to(target_id, target_action))
   end
 
   def show_results(data, results) do
