@@ -31,8 +31,10 @@ const initialState = {
   res_temp: 0,
   inv_results: {},
   trust_results: {},
-  change_role_flag: false,
   participants_length: 0,
+  invested_flag: false,
+  responded_flag: false,
+  change_role_flag: false,
 }
 
 const reducer = concatenateReducers([
@@ -63,14 +65,18 @@ const reducer = concatenateReducers([
 
     [syncInvTemp]: (_, { payload }) => ({ inv_temp: payload }),
     'sync inv_temp': (_, { payload }) => ({ inv_temp: payload }),
-    [finishInvesting]: (_, { payload }) => ({ pair_state: "responding", inv_final: payload, inv_temp: 0, }),
-    'finish investing': (_, { payload }) => ({ pair_state: "responding", inv_final: payload, inv_temp: 0, }),
+    [finishInvesting]: (_, { payload }) => ({ pair_state: "responding", inv_final: payload, inv_temp: 0, invested_flag: true, }),
+    'finish investing': (_, { payload }) => ({ pair_state: "responding", inv_final: payload, inv_temp: 0, invested_flag: true, }),
+    [syncResTemp]: (_, { payload }) => ({ res_temp: payload }),
+    'sync res_temp': (_, { payload }) => ({ res_temp: payload }),
     [finishResponding]: ({ point, game_rate, game_round, pair_round, inv_final }, { payload }) => ({
       pair_state: pair_round < game_round? "investing" : "finished",
       pair_round: pair_round < game_round? pair_round+1 : pair_round,
       role: pair_round < game_round? "investor" : "responder",
       point: point + (inv_final*game_rate) - payload,
       res_temp: 0,
+      res_final: payload,
+      responded_flag: true,
     }),
     'finish responding': ({ point, game_rate, game_point, game_round, pair_round, inv_final }, { payload }) => ({
       pair_state: pair_round < game_round? "investing" : "finished",
@@ -78,11 +84,11 @@ const reducer = concatenateReducers([
       role: pair_round < game_round? "responder" : "investor",
       point: point + game_point - inv_final + payload,
       res_temp: 0,
+      res_final: payload,
+      responded_flag: true,
     }),
-    [syncResTemp]: (_, { payload }) => ({ res_temp: payload }),
-    'sync res_temp': (_, { payload }) => ({ res_temp: payload }),
 
-    [fallSnackBarFlags]: ({ pair_state }) => ({ change_role_flag: pair_state == "investing" }),
+    [fallSnackBarFlags]: ({ pair_state }) => ({ invested_flag: false, responded_flag: false, change_role_flag: pair_state == "investing" }),
     [fallSnackBarFlags2]: ({}) => ({ change_role_flag: false }),
     [changeChartRound]: (_, { payload }) => ({ chart_round: payload, chart_button: true }),
     [fallChartButton]: () => ({ chart_button: false}),

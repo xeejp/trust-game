@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Chip from 'material-ui/chip';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Slider from 'material-ui/Slider'
 import RaisedButton from 'material-ui/RaisedButton';
@@ -51,9 +52,15 @@ class Investing extends Component {
           />
           <CardText>
             {role == "investor"?
-              <p>あなたに残るポイント: {game_point - inv_temp} 応答者に投資されるポイント: {inv_temp} × {game_rate} = {inv_temp * game_rate }</p>
+              <span style={{margin: 12}}>
+                <Chip style={{float: "left"}}>あなたに残るポイント: {game_point - inv_temp}</Chip>
+                <Chip style={{float: "right"}}>応答者に投資されるポイント: {inv_temp}</Chip>
+              </span>
             :
-              <p>あなたに投資されるポイント: {inv_temp} × {game_rate} = {inv_temp * game_rate } 投資者に残るポイント: {game_point - inv_temp}</p>
+              <span style={{margin: 12}}>
+                <Chip style={{float: "left"}}>あなたに投資されるポイント: {inv_temp}</Chip>
+                <Chip style={{float: "right"}}>投資者に残るポイント: {game_point - inv_temp}</Chip>
+              </span>
             }
             <Slider
               min={0}

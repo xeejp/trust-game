@@ -18,15 +18,19 @@ import {
 } from 'util/index'
 
 const mapStateToProps = ({
-  pair_state, role, allo_result,
+  pair_state, role,
   game_round, pair_round,
   point, game_progress,
   change_role_flag,
+  invested_flag, responded_flag,
+  inv_final, res_final,
 }) => ({
-  pair_state, role, allo_result,
+  pair_state, role,
   game_round, pair_round,
   point, game_progress,
   change_role_flag,
+  invested_flag, responded_flag,
+  inv_final, res_final,
 })
 
 const styles = {
@@ -82,8 +86,10 @@ class Respond extends Component {
     const {
       role, game_round,
       pair_round, point,
-      game_progress, allo_result,
+      game_progress,
       change_role_flag, pair_state,
+      invested_flag, responded_flag,
+      inv_final, res_final,
     } = this.props
     return (
       role != "visitor"?
@@ -95,11 +101,23 @@ class Respond extends Component {
             </span>
           : <Chip style={styles.chip2}>参加者全体の進捗: {Math.round(game_progress)} %</Chip>
         }
-        <Chip style={styles.chip2}>ポイント: {point}</Chip>
+        <Chip style={styles.chip2}>累計ポイント: {point}</Chip>
         <div style={styles.contents}>{this.renderContents()}</div>
           <Snackbar
+            open={invested_flag}
+            message={inv_final + "ポイント" + (role=="investor"? "を投資しました。応答をお待ち下さい。" : "が投資されました。返却ポイントを決定してください。")}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
+          <Snackbar
+            open={responded_flag}
+            message={res_final + "ポイント" + (role=="investor"? "を返却しました。" : "が返却されました。")}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
+          <Snackbar
             open={change_role_flag}
-            message={"役割交換によりあなたは" + getRoleName(role) + "になりました。"}
+            message={"役割交換によりあなたは" + getRoleName(role) + "になりました。実験を続けてください。"}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose2}
           />

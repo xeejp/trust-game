@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Chip from 'material-ui/chip';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Slider from 'material-ui/Slider'
 import RaisedButton from 'material-ui/RaisedButton';
@@ -35,9 +36,15 @@ class Responding extends Component {
 
   render() {
     const { role, inv_final, res_temp, game_point, game_rate } = this.props
-    const style = {
-      margin: 12,
+    const styles = {
+      rised: {
+        margin: 12,
+      },
+      chips: {
+        margin: 4,
+      }
     }
+
     const enemy = (role == "responder")? "investor" : "responder"
     return (
       <div>
@@ -48,19 +55,17 @@ class Responding extends Component {
           />
           <CardText>
             {role == "responder"?
-              <span>
-              <p>あなたのポイント: 投資されたポイント({inv_final}) × {game_rate}
-              - 返却するポイント({res_temp}) = {inv_final*game_rate - res_temp}</p>
-              <p>投資者のポイント: 初めに貰ったポイント({game_point}) - あなたに投資したポイント({inv_final})
-              + あなたが返却するポイント({res_temp}) = {game_point - inv_final + res_temp}</p>
-              </span>
-            :
-              <span>
-              <p>あなたのポイント: 初めに貰ったポイント({game_point}) - 応答者に投資したポイント({inv_final})
-              + 応答者が返却するポイント({res_temp}) = {game_point - inv_final + res_temp}</p>
-              <p>応答者のポイント: 投資されたポイント({inv_final}) × {game_rate}
-                - あなたに返却するポイント({res_temp}) = {inv_final*game_rate - res_temp}</p>
-              </span>
+                <span style={{margin: 4}}>
+                  <Chip style={styles.chips}>投資されたポイント: {inv_final} × {game_rate} = {inv_final*game_rate}</Chip>
+                  <Chip style={Object.assign({}, styles.chips, {float: "left"})}>あなたに残るポイント: {inv_final*game_rate - res_temp}</Chip>
+                  <Chip style={Object.assign({}, styles.chips, {float: "right"})}>投資者に返却されるポイント: {res_temp}</Chip>
+                </span>
+              :
+                <span style={{margin: 4}}>
+                  <Chip style={styles.chips}>投資したポイント: {inv_final} × {game_rate} = {inv_final*game_rate}</Chip>
+                  <Chip style={{float: "left"}}>あなたに返却されるポイント: {res_temp}</Chip>
+                  <Chip style={{float: "right"}}>応答者に残るポイント: {inv_final*game_rate - res_temp}</Chip>
+                </span>
             }
             <Slider
               min={0}
@@ -73,7 +78,7 @@ class Responding extends Component {
             <RaisedButton
               label="返却ポイント確定"
               primary={true}
-              style={style}
+              style={styles.rised}
               onClick={this.handleConfirm}
               disabled={role == "investor"}
             />
