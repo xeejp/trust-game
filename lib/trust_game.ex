@@ -1,11 +1,6 @@
 defmodule TrustGame do
-  use Xee.ThemeScript
+  use XeeThemeScript
   require Logger
-
-  require_file "scripts/main.exs"
-  require_file "scripts/host.exs"
-  require_file "scripts/participant.exs"
-  require_file "scripts/actions.exs"
 
   alias TrustGame.Host
   alias TrustGame.Participant

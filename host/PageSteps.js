@@ -12,7 +12,7 @@ import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 
-import { getPageName, pages } from 'util/index'
+import { getPageName, game_pages } from 'util/index'
 
 import {
   changePage,
@@ -48,10 +48,10 @@ class PageSteps extends React.Component {
 
   handleNext = () => {
     const { dispatch, game_page, loading } = this.props
-    var next = pages[0]
-    for(let i = 0; i < pages.length - 1; i++){
-      if(game_page == pages[i]) {
-        next = pages[(i + 1) % pages.length]
+    var next = game_pages[0]
+    for(let i = 0; i < game_pages.length - 1; i++){
+      if(game_page == game_pages[i]) {
+        next = game_pages[(i + 1) % game_pages.length]
         break
       }
     }
@@ -65,10 +65,10 @@ class PageSteps extends React.Component {
 
   handlePrev = () => {
     const { dispatch, game_page, loading} = this.props
-    let prev = pages[0]
-    for(let i = 1; i < pages.length; i++){
-      if(game_page == pages[i]) {
-        prev = pages[(i - 1) % pages.length]
+    let prev = game_pages[0]
+    for(let i = 1; i < game_pages.length; i++){
+      if(game_page == game_pages[i]) {
+        prev = game_pages[(i - 1) % game_pages.length]
         break
       }
     }
@@ -104,22 +104,20 @@ class PageSteps extends React.Component {
   }
 
   renderButtons() {
-    const { page } = this.props
+    const { game_page } = this.props
     return (
       <div style={{margin: '16px 18px'}}>
         <FlatButton
           label="戻る"
-          disabled={pages[0] == page}
+          disabled={game_pages[0] == game_page}
           onTouchTap={this.handlePrev}
           style={{marginRight: "12px"}}
         />
-        <span style={{float: "right"}}>
-          <RaisedButton
-            label={pages[3] === page ? '実験を続ける' : '次へ'}
-            primary={true}
-            onTouchTap={this.handleNext}
-          />
-        </span>
+        <RaisedButton
+          label={game_pages[3] === game_page ? '実験を続ける' : '次へ'}
+          primary={true}
+          onTouchTap={this.handleNext}
+        />
       </div>
     );
   }
@@ -127,23 +125,23 @@ class PageSteps extends React.Component {
   render() {
     const { game_page, loading } = this.props
     const buttons = []
-    for (let i = 0; i < pages.length; i ++) {
+    for (let i = 0; i < game_pages.length; i ++) {
       buttons[i] = (
         <Step key={i}>
         <StepButton
-        onClick={this.handleChangePage.bind(this, pages[i])}
-        >{getPageName(pages[i])}</StepButton>
+        onClick={this.handleChangePage.bind(this, game_pages[i])}
+        >{getPageName(game_pages[i])}</StepButton>
         </Step>
       )
     }
     return (
       <div style={{width: '100%',  margin: 'auto'}}>
-      <Stepper activeStep={pages.indexOf(game_page)} linear={false}>
+      <Stepper activeStep={game_pages.indexOf(game_page)} linear={false}>
         {buttons}
       </Stepper>
       {this.renderButtons()}
       <ExpandTransition loading={loading} open={true} transitionDuration={300}>
-        <div style={{margin: '8px 20px'}}>{this.getStepContent(pages.indexOf(game_page))}</div>
+        <div style={{margin: '8px 20px'}}>{this.getStepContent(game_pages.indexOf(game_page))}</div>
       </ExpandTransition>
       </div>
     );

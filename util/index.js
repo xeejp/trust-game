@@ -1,4 +1,4 @@
-export const pages = [
+export const game_pages = [
   "waiting",
   "description",
   "experiment",
@@ -6,7 +6,7 @@ export const pages = [
 ]
 
 export function getPageName(page) {
-  switch(pages.indexOf(page)) {
+  switch(game_pages.indexOf(page)) {
     case 0: return "待機"
     case 1: return "説明"
     case 2: return "実験"

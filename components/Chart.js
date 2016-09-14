@@ -240,7 +240,9 @@ class Chart extends Component {
                 <RightIcon color={grey300}/>
               </IconButton>
             }
-            <Chip style={{clear: "both", margin: "auto"}}>表示ラウンド: {chart_round}</Chip>
+            <div style={{clear: "both", margin: "auto"}} >
+              <Chip style={{margin: "auto"}}>表示ラウンド: {chart_round}</Chip>
+            </div>
           </div>
         </CardText>
       </Card>
