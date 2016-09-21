@@ -73,7 +73,7 @@ const Users = ({ pairs, participants, game_round, openParticipantPage }) => (
   <div>
     <Card style={{margin: '16px 16px'}}>
       <CardHeader
-        title={"参加者 (" + Object.keys(participants).length + ")"}
+        title={"登録者 " + Object.keys(participants).length + "人"}
         actAsExpander={true}
         showExpandableButton={true}
       />

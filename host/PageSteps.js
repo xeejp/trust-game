@@ -11,6 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
+import Divider from 'material-ui/Divider'
 
 import { getPageName, game_pages } from 'util/index'
 
@@ -140,6 +141,12 @@ class PageSteps extends React.Component {
         {buttons}
       </Stepper>
       {this.renderButtons()}
+          <Divider
+            style={{
+              marginTop: "5%",
+              marginBottom: "5%"
+            }}
+          />
       <ExpandTransition loading={loading} open={true} transitionDuration={300}>
         <div style={{margin: '8px 20px'}}>{this.getStepContent(game_pages.indexOf(game_page))}</div>
       </ExpandTransition>
