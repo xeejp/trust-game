@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card'
 import Slider from 'material-ui/Slider'
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ActionSettings from 'material-ui/svg-icons/action/settings'
 import Dialog from 'material-ui/Dialog';
 import Toggle from 'material-ui/Toggle';
+import Chip from 'material-ui/chip'
 
 import Counter from 'components/Counter'
 
@@ -112,15 +114,10 @@ class ExperimentSetting extends Component {
   }
 
   render() {
-    const { game_page } = this.props
+    const { game_page, game_round, game_rate, game_point } = this.props
     const { game_round_temp, game_rate_temp, game_point_temp } = this.state
     const actions = [
-      <FlatButton
-        label="キャンセル"
-        secondary={true}
-        onTouchTap={this.handleClose}
-      />,
-      <FlatButton
+      <RaisedButton
         label="適用"
         primary={true}
         onTouchTap={this.handleConfirm}
@@ -129,17 +126,11 @@ class ExperimentSetting extends Component {
 
     return (
       <span>
-        { game_page == "waiting"?
-          <RaisedButton label="実験設定"
+          <FloatingActionButton
             onTouchTap={this.handleOpen}
             style={{marginRight: "12px"}}
-          />
-        :
-          <FlatButton label="実験設定"
-            style={{marginRight: "12px"}}
-            disabled={true}
-          />
-        }
+            disabled={game_page != "waiting"}
+          ><ActionSettings /></FloatingActionButton>
         <Dialog
           title="実験設定"
           actions={actions}
@@ -147,6 +138,9 @@ class ExperimentSetting extends Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
+          <Chip style={styles.chip}>ラウンド: {game_round}</Chip>
+          <Chip style={styles.chip}>仲介者レート: {game_rate}</Chip>
+          <Chip style={styles.chip}>ラウンド初めに配られるポイント: {game_point}</Chip>
           <Counter
             title="ゲームラウンド数"
             value={game_round_temp}

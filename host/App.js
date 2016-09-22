@@ -12,7 +12,8 @@ import FlatButton from 'material-ui/FlatButton';
 import PageSteps from './PageSteps.js'
 import Users from './Users.js'
 import Chart from '../components/Chart.js'
-import Settings from './Settings.js'
+import ExperimentSetting from './ExperimentSetting'
+import MatchingButton from './MatchingButton'
 
 import throttle from 'react-throttle-render'
 
@@ -41,7 +42,8 @@ class App extends Component {
         <PageSteps />
         <Users />
         <ThrottledChart />
-        <Settings />
+        <ExperimentSetting />
+        <MatchingButton />
       </div>
     )
   }
