@@ -80,29 +80,6 @@ class PageSteps extends React.Component {
     }
   }
 
-  getStepContent(game_page) {
-    const {game_round, pairs, game_progress } = this.props
-    switch (game_page) {
-      case 0:
-        return (
-          <div>
-            <p>参加者側に待機画面を表示しています。</p>
-          </div>
-        );
-      case 1:
-        return <p>参加者側に説明を表示しています。</p>
-      case 2:
-        return (
-          <div>
-            <p>参加者側に実験画面を表示しています。</p>
-            <p>現在の進捗: {game_progress} %</p>
-          </div>
-        )
-      case 3:
-        return <p>参加者側に結果を表示しています。</p>
-    }
-  }
-
   renderButtons() {
     const { game_page } = this.props
     return (
