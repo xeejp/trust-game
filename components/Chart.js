@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import throttle from 'react-throttle-render'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import Chip from 'material-ui/chip'
@@ -251,4 +252,4 @@ class Chart extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Chart)
+export default connect(mapStateToProps)(throttle(Chart, 200))
