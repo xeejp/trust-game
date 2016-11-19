@@ -30,7 +30,7 @@ function* syncGameProgressSaga() {
     if(game_page == "experiment"){
       const pairs = yield select(({pairs}) => pairs)
       const pairs_length = Object.keys(pairs).length
-      const finished_pairs = Object.keys(pairs).filter(pair_id => pairs[pair_id].state == "finished").length
+      const finished_pairs = Object.keys(pairs).filter(pair_id => pairs[pair_id].pair_state == "finished").length
       sendData('SYNC_GAME_PROGRESS', Math.round(100 * finished_pairs / pairs_length))
     }
   }
