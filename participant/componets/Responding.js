@@ -58,13 +58,11 @@ class Responding extends Component {
                 <span style={{margin: 4}}>
                   <Chip style={styles.chips}>投資されたポイント: {inv_final} × {game_rate} = {inv_final*game_rate}</Chip>
                   <Chip style={Object.assign({}, styles.chips, {float: "left"})}>あなたに残るポイント: {inv_final*game_rate - res_temp}</Chip>
-                  <Chip style={Object.assign({}, styles.chips, {float: "right"})}>投資者に返却されるポイント: {res_temp}</Chip>
                 </span>
               :
                 <span style={{margin: 4}}>
                   <Chip style={styles.chips}>投資したポイント: {inv_final} × {game_rate} = {inv_final*game_rate}</Chip>
                   <Chip style={{float: "left"}}>あなたに返却されるポイント: {res_temp}</Chip>
-                  <Chip style={{float: "right"}}>応答者に残るポイント: {inv_final*game_rate - res_temp}</Chip>
                 </span>
             }
             <Slider
@@ -74,7 +72,19 @@ class Responding extends Component {
               value={ role == "responder"? res_temp : inv_final*game_rate - res_temp }
               onChange={this.handleThinking}
               disabled={role == "investor"}
+              style={{height: '30px'}}
             />
+            {role == "responder"?
+                <span style={{margin: 4}}>
+                  <Chip style={Object.assign({}, styles.chips, {float: "right"})}>投資者に返却されるポイント: {res_temp}</Chip>
+                </span>
+              :
+                <span style={{margin: 4}}>
+                  <Chip style={{float: "right"}}>応答者に残るポイント: {inv_final*game_rate - res_temp}</Chip>
+                </span>
+            }
+          </CardText>
+          <CardActions>
             <RaisedButton
               label="返却ポイント確定"
               primary={true}
@@ -82,7 +92,7 @@ class Responding extends Component {
               onClick={this.handleConfirm}
               disabled={role == "investor"}
             />
-          </CardText>
+          </CardActions>
         </Card>
       </div>
     )

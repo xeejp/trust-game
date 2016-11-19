@@ -42,6 +42,7 @@ class Investing extends Component {
     const style = {
       margin: 12,
     }
+    
     const enemy = (role == "responder")? "investor" : "responder"
     return (
       <div>
@@ -52,14 +53,12 @@ class Investing extends Component {
           />
           <CardText>
             {role == "investor"?
-              <span style={{margin: 12}}>
+              <span style={{margin: 8}}>
                 <Chip style={{float: "left"}}>あなたに残るポイント: {game_point - inv_temp}</Chip>
-                <Chip style={{float: "right"}}>応答者に投資されるポイント: {inv_temp}</Chip>
               </span>
             :
-              <span style={{margin: 12}}>
+              <span style={{margin: 8}}>
                 <Chip style={{float: "left"}}>あなたに投資されるポイント: {inv_temp}</Chip>
-                <Chip style={{float: "right"}}>投資者に残るポイント: {game_point - inv_temp}</Chip>
               </span>
             }
             <Slider
@@ -69,7 +68,19 @@ class Investing extends Component {
               value={ role == "investor"? inv_temp : game_point - inv_temp }
               onChange={this.handleThinking}
               disabled={role == "responder"}
+              style={ {height: '30px'} }
             />
+            {role == "investor"?
+              <span style={{margin: 8}}>
+                <Chip style={{float: "right"}}>応答者に投資されるポイント: {inv_temp}</Chip>
+              </span>
+            :
+              <span style={{margin: 8}}>
+                <Chip style={{float: "right"}}>投資者に残るポイント: {game_point - inv_temp}</Chip>
+              </span>
+            }
+          </CardText>
+          <CardActions>
             <RaisedButton
               label="投資ポイント確定"
               primary={true}
@@ -77,7 +88,7 @@ class Investing extends Component {
               onClick={this.handleConfirm}
               disabled={role == "responder"}
             />
-          </CardText>
+          </CardActions>
         </Card>
       </div>
     )
