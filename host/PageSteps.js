@@ -87,13 +87,13 @@ class PageSteps extends React.Component {
         <FlatButton
           label="戻る"
           disabled={game_pages[0] == game_page}
-          onTouchTap={this.handlePrev}
+          onClick={this.handlePrev}
           style={{marginRight: "12px"}}
         />
         <RaisedButton
           label={game_pages[3] === game_page ? '実験を続ける' : '次へ'}
           primary={true}
-          onTouchTap={this.handleNext}
+          onClick={this.handleNext}
         />
       </div>
     );
