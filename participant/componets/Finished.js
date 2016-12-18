@@ -15,11 +15,11 @@ const Finished = ({ role }) => (() => {
     <div>
     <Card>
     <CardHeader
-    title={getRoleName(role) + "側"}
-    subtitle="終了待ち"
+    title={getRoleName(role)}
+    subtitle="終了待機"
       />
     <CardText>
-    <p>このペアの実験は終了しました。他のペアが終了するまでお待ち下さい。</p>
+    <p>あなたの実験は終了しました。他のペアが終了するまでこのままお待ち下さい。</p>
     </CardText>
     </Card>
     </div>

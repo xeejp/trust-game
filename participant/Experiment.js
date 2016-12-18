@@ -117,7 +117,7 @@ class Respond extends Component {
           />
           <Snackbar
             open={change_role_flag}
-            message={"役割交換によりあなたは" + getRoleName(role) + "になりました。実験を続けてください。"}
+            message={"役割交代によりあなたは" + getRoleName(role) + "になりました。実験を続けてください。"}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose2}
           />

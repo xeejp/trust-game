@@ -14,6 +14,7 @@ import Users from './Users.js'
 import Chart from '../components/Chart.js'
 import ExperimentSetting from './ExperimentSetting'
 import MatchingButton from './MatchingButton'
+import DownloadButton from './DownloadButton'
 
 import throttle from 'react-throttle-render'
 
@@ -44,6 +45,7 @@ class App extends Component {
         <ThrottledChart />
         <ExperimentSetting />
         <MatchingButton />
+        <DownloadButton />
       </div>
     )
   }

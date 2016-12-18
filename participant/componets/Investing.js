@@ -46,50 +46,50 @@ class Investing extends Component {
     const enemy = (role == "responder")? "investor" : "responder"
     return (
       <div>
+       {role == "investor"?
         <Card>
           <CardHeader
-            title={"あなたは" + getRoleName(role) + "側です"}
-            subtitle={role == "responder"? getRoleName(enemy) + "が投資中。しばらくお待ちください。" : "投資してください。"}
+            title={"あなたは投資者です。"}
+            subtitle={"投資ポイントを選択してください。"}
           />
           <CardText>
-            {role == "investor"?
-              <span style={{margin: 8}}>
-                <Chip style={{float: "left"}}>あなたに残るポイント: {game_point - inv_temp}</Chip>
-              </span>
-            :
-              <span style={{margin: 8}}>
-                <Chip style={{float: "left"}}>あなたに投資されるポイント: {inv_temp}</Chip>
-              </span>
-            }
+            <span style={{margin: 8}}>
+              <Chip style={{float: "left"}}>手もとに残るポイント: {game_point - inv_temp}ポイント</Chip>
+            </span>
             <Slider
               min={0}
               max={game_point}
               step={1}
-              value={ role == "investor"? inv_temp : game_point - inv_temp }
+              value={inv_temp}
               onChange={this.handleThinking}
-              disabled={role == "responder"}
               style={ {height: '30px'} }
             />
-            {role == "investor"?
-              <span style={{margin: 8}}>
-                <Chip style={{float: "right"}}>応答者に投資されるポイント: {inv_temp}</Chip>
-              </span>
-            :
-              <span style={{margin: 8}}>
-                <Chip style={{float: "right"}}>投資者に残るポイント: {game_point - inv_temp}</Chip>
-              </span>
-            }
+            <span style={{margin: 8}}>
+              <Chip style={{float: "right"}}>相手に渡すポイント: {inv_temp}ポイント</Chip>
+            </span>
           </CardText>
           <CardActions>
             <RaisedButton
-              label="投資ポイント確定"
+              label="確定"
               primary={true}
               style={style}
               onClick={this.handleConfirm}
-              disabled={role == "responder"}
             />
           </CardActions>
         </Card>
+        :
+        <Card>
+          <CardHeader
+            title={"あなたは応答者です。"}
+            subtitle={"相手が投資ポイントを選択しています。しばらくお待ちください。"}
+          />
+          <CardText>
+            <span style={{margin: 8}}>
+              <Chip style={{float: "left"}}>{inv_temp? "相手は入力中です。": "相手は待機中です。"}</Chip>
+            </span>
+          </CardText>
+        </Card>
+        }
       </div>
     )
   }
