@@ -35,7 +35,8 @@ const DownloadButton = ({ participants, trust_results, game_point, game_rate, ga
                                                                                            trust_results[id2][id3].hold,
                                                                                            trust_results[id2][id3].return].join(',')).join("\n")].join(',')).join("\n");
       
-      var blob = new Blob([content]);
+      var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+      var blob = new Blob([bom,content]);
       var url = window.URL || window.webkitURL;
       var blobURL = url.createObjectURL(blob);
 
