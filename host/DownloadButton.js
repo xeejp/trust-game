@@ -5,10 +5,10 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FileFileDownload from 'material-ui/svg-icons/file/file-download'
 
 const mapStateToProps = ({ participants, trust_results, game_point, game_rate, game_round }) => ({
-  participants, trust_results, game_point, game_rate, game_round
+  participants, trust_results, game_point, game_rate, game_round 
 })
 
-const DownloadButton = ({ participants, trust_results, game_point, game_rate, game_round, style, disabled }) => (
+const DownloadButton = ({ participants, trust_results, game_point, game_rate, game_round, style ,disabled}) => (
   <FloatingActionButton
     style={style}
     disabled={disabled}

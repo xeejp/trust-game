@@ -21,7 +21,13 @@ const UsersList = ({participants, openParticipantPage }) => (
     <thead><tr><th>ID</th><th>役割</th><td>ポイント</td><td>所属ペアID</td></tr></thead>
     <tbody>
       {
-        Object.keys(participants).map(id => (
+        Object.keys(participants).sort((id1, id2) => {
+          if(participants[id1].pair_id > participants[id2].pair_id) return  1
+          if(participants[id1].pair_id < participants[id2].pair_id) return -1
+          if(participants[id1].role > participants[id2].role) return  1
+          if(participants[id1].role < participants[id2].role) return -1
+          return 0
+        }).map(id => (
           <User
             key={id}
             id={id}
@@ -82,20 +88,6 @@ const Users = ({ pairs, participants, game_round, openParticipantPage }) => (
         <UsersList
           participants={participants}
           openParticipantPage={openParticipantPage}
-        />
-      </CardText>
-    </Card>
-    <Card style={{margin: '16px 16px'}}>
-      <CardHeader
-        title={"ペア (" + Object.keys(pairs).length + ")"}
-        actAsExpander={true}
-        showExpandableButton={true}
-      />
-      <CardText expandable={true}>
-        <Pairs
-          pairs={pairs}
-          participants={participants}
-          game_round={game_round}
         />
       </CardText>
     </Card>

@@ -13,15 +13,15 @@ import PageSteps from './PageSteps.js'
 import Users from './Users.js'
 import Chart from '../components/Chart.js'
 import ExperimentSetting from './ExperimentSetting'
-import MatchingButton from './MatchingButton'
+import EditQuestion from  './EditQuestion'
 import DownloadButton from './DownloadButton'
 
 import throttle from 'react-throttle-render'
 
 const ThrottledChart = throttle(Chart, 100)
 
-const mapStateToProps = ({ dispatch }) => ({
-  dispatch,
+const mapStateToProps = ({ dispatch ,game_page}) => ({
+  dispatch ,game_page
 })
 
 class App extends Component {
@@ -38,14 +38,18 @@ class App extends Component {
   }
 
   render() {
+    const { game_page } = this.props
     return (
       <div>
         <PageSteps />
         <Users />
         <ThrottledChart />
         <ExperimentSetting />
-        <MatchingButton />
-        <DownloadButton />
+        <EditQuestion />
+        <DownloadButton 
+            style={{marginLeft: "2%"}}
+            disabled={game_page != "result"}
+        />
       </div>
     )
   }
