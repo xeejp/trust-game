@@ -18,12 +18,6 @@ const mapStateToProps = ({ game_round, game_rate, game_point, game_page }) => ({
 })
 
 const styles = {
-  block: {
-    margin: '20px 20px'
-  },
-  game_roundButton: {
-    margin: 12,
-  },
 };
 
 class ExperimentSetting extends Component {
@@ -102,7 +96,6 @@ class ExperimentSetting extends Component {
         label="適用"
         primary={true}
         onTouchTap={this.handleConfirm}
-　　　　style={{marginRight: "12px"}}
       />,
       <RaisedButton
         label="終了"
@@ -114,7 +107,6 @@ class ExperimentSetting extends Component {
       <span>
           <FloatingActionButton
             onTouchTap={this.handleOpen}
-            style={{marginRight: "12px"}}
             disabled={game_page != "waiting"}
           ><ActionSettings /></FloatingActionButton>
         <Dialog

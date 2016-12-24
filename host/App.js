@@ -45,7 +45,10 @@ class App extends Component {
         <Users />
         <ThrottledChart />
         <ExperimentSetting />
-        <EditQuestion />
+        <EditQuestion 
+          style={{marginLeft: "2%"}} 
+          disabled={game_page != "waiting"}
+        />
         <DownloadButton 
             style={{marginLeft: "2%"}}
             disabled={game_page != "result"}
