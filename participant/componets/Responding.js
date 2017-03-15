@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import Chip from 'material-ui/chip';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
-import Slider from 'material-ui/Slider'
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { getRoleName } from 'util/index'
@@ -12,6 +11,7 @@ import {
   syncResTemp,
   finishResponding,
 } from '../actions.js'
+import Slider from '../Slider.js'
 
 const mapStateToProps = ({ inv_final, res_temp, role, game_point, game_rate }) => ({
   inv_final, res_temp, role, game_point, game_rate,
@@ -72,9 +72,11 @@ class Responding extends Component {
             <CardText>
               <div>相手から受け取ったポイント: {inv_final} × {game_rate} = {inv_final*game_rate}</div>
               <span style={{margin: 8}}>
-                <Chip style={{float: "left"}}>手もとに残るポイント: {inv_final * game_rate - res_temp}ポイント</Chip>
+                <p>手もとに残るポイント: {inv_final * game_rate - res_temp}ポイント</p>
+                <p>相手に渡すポイント: {res_temp}ポイント</p>
               </span>
               <Slider
+                divisor={10}
                 min={0}
                 max={inv_final * game_rate}
                 step={1}
@@ -82,9 +84,6 @@ class Responding extends Component {
                 onChange={this.handleThinking}
                 style={{height: '30px'}}
               />
-              <span style={{margin: 4}}>
-                <Chip style={{float: "right"}}>相手に渡すポイント: {res_temp}ポイント</Chip>
-              </span>
             </CardText>
             <CardActions>
               <RaisedButton
