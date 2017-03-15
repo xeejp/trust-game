@@ -24,6 +24,10 @@ class Slider extends Component {
   constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
+    this.state = {
+      animation: false,
+      animationProgress: -1
+    }
   }
 
   getValueForSelection(number) {
@@ -50,22 +54,32 @@ class Slider extends Component {
   componentDidMount() {
     const { divisor, onChange } = this.props
     const delta = 50
+    this.setState({animation: true, animationProgress: -1})
+    let delay = 0
     for (let i = 0; i < divisor; i ++) {
       setTimeout(() => {
-        onChange(null, this.getValueForSelection(i))
-      }, delta * i)
+        this.setState({animationProgress: i})
+      }, delay)
+      delay += delta
     }
     for (let i = 0; i < divisor; i ++) {
       const selection = divisor - 1 - i - 1
       setTimeout(() => {
-        onChange(null, this.getValueForSelection(selection))
-      }, delta * divisor + delta * (i + 1))
+        this.setState({animationProgress: selection})
+      }, delay)
+      delay += delta
     }
+    setTimeout(() => {
+      this.setState({animation: false})
+    }, delay)
   }
 
   render() {
     const { value, divisor } = this.props
-    const selection = this.getSelectionForValue(value)
+    const { animation, animationProgress } = this.state
+    const selection = animation
+      ? animationProgress
+      : this.getSelectionForValue(value)
     const panels = new Array(divisor)
     for (let i = 0; i < divisor; i ++) {
       panels[i] = (
