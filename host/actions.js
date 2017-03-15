@@ -2,8 +2,6 @@ import { createAction } from 'redux-actions'
 
 export const fetchContents = createAction('FETCH_CONTENTS')
 
-export const showResults = createAction('SHOW_RESULTS')
-
 export const match = createAction('MATCH')
 export const reset = createAction('RESET')
 

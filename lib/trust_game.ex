@@ -43,7 +43,6 @@ defmodule TrustGame do
     Logger.debug("[Trust Game] #{action} #{inspect params}")
     result = case {action, params} do
       {"FETCH_CONTENTS", _} -> Host.fetch_contents(data)
-      {"SHOW_RESULTS", results} -> Host.show_results(data, results)
       {"MATCH", _} -> Host.match(data)
       {"RESET", _} -> Host.reset(data)
       {"CHANGE_PAGE", page} -> Host.change_page(data, page)

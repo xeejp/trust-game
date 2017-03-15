@@ -18,6 +18,7 @@ defmodule TrustGame.Participant do
         res_temp: true,
         pair_state: true
       }},
+      trust_results: data.game_page == "result",
       _spread: [[:participants, id], [:pairs, pair_id]]
     }
     data

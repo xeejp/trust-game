@@ -4,7 +4,6 @@ import { delay } from "redux-saga";
 
 import {
   fetchContents,
-  showResults,
   match,
   changePage,
   changeGameRound,
@@ -30,23 +29,12 @@ function* matchSaga() {
   }
 }
 
-function* showResultsSaga() {
-  while(true) {
-    yield take(`${showResults}`)
-    const results = yield select(({ trust_results }) => trust_results)
-    sendData('SHOW_RESULTS', results)
-  }
-}
-
 function* changePageSaga() {
   while (true) {
     const { payload } = yield take(`${changePage}`)
     sendData('CHANGE_PAGE', payload)
     if (payload == 'description') {
       yield put(match())
-    }
-    if (payload == 'result') {
-      yield put(showResults())
     }
   }
 }
@@ -75,7 +63,6 @@ function* changeGamePointSaga() {
 function* saga() {
   yield fork(fetchContentsSaga)
   yield fork(matchSaga)
-  yield fork(showResultsSaga)
   yield fork(changePageSaga)
   yield fork(changeGameRoundSaga)
   yield fork(changeGameRateSaga)
