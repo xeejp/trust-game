@@ -2,6 +2,10 @@ defmodule TrustGame.Host do
   alias TrustGame.Main
   alias TrustGame.Actions
 
+  def filter_data(data) do
+    data
+  end
+
   # Actions
   def fetch_contents(data) do
     data
@@ -26,25 +30,11 @@ defmodule TrustGame.Host do
       pairs: %{},
       trust_results: %{},
     }
-    |> Actions.reseted()
-  end
-
-  def sync_game_progress(data, game_progress) do
-    Actions.sync_game_progress(data, game_progress)
-  end
-
-  def sync_participants_length(data, participants_length) do
-    Actions.sync_participants_length(data, participants_length)
-  end
-
-  def show_results(data, results) do
-    Actions.show_results(data, results)
   end
 
   def change_page(data, game_page) do
     if game_page in Main.pages do
       %{data | game_page: game_page}
-      |> Actions.change_page(game_page)
     else
       data
     end
@@ -53,19 +43,16 @@ defmodule TrustGame.Host do
   def change_game_round(data, game_round) do
     if game_round < 0 do game_round = 1 end
     %{data | game_round: game_round}
-    |> Actions.change_game_round(game_round)
   end
 
   def change_game_point(data, game_point) do
     if game_point < 0 do game_point = 1 end
     %{data | game_point: game_point}
-    |> Actions.change_game_point(game_point)
   end
 
   def change_game_rate(data, game_rate) do
     if game_rate < 0 do game_rate = 1 end
     %{data | game_rate: game_rate}
-    |> Actions.change_game_rate(game_rate)
   end
 
   def match(data) do
@@ -107,10 +94,5 @@ defmodule TrustGame.Host do
     {participants, groups} = Enum.reduce(groups, acc, reducer)
 
     %{data | participants: participants, pairs: groups}
-    |> Actions.matched()
-  end
-  
-  def format_contents(data) do
-    data
   end
 end

@@ -1,6 +1,30 @@
 defmodule TrustGame.Participant do
   alias TrustGame.Actions
 
+  def filter_data(data, id) do
+    pair_id = get_in(data, [:participants, id, :pair_id])
+    rule = %{
+      game_page: true,
+      game_round: true,
+      game_point: true,
+      game_rate: true,
+      game_progress: true,
+      participants: %{id => true},
+      pairs: %{pair_id => %{
+        members: true,
+        pair_round: true,
+        inv_temp: true,
+        inv_final: true,
+        res_temp: true,
+        pair_state: true
+      }},
+      _spread: [[:participants, id], [:pairs, pair_id]]
+    }
+    data
+    |> Transmap.transform(rule)
+    |> Map.put(:participants_length, Map.size(data.participants))
+  end
+
   require Logger
   # Actions
   def fetch_contents(data, id) do
@@ -11,7 +35,7 @@ defmodule TrustGame.Participant do
     pair_id = get_in(data, [:participants, id, :pair_id])
     target_id = getTargetId(data, id)
     if "investing" == get_in(data, [:pairs, pair_id, :pair_state]) do
-      Actions.sync_inv_temp(data, target_id, inv_temp)
+      put_in(data, [:pairs, pair_id, :inv_temp], inv_temp)
     else
       data
     end
@@ -23,7 +47,6 @@ defmodule TrustGame.Participant do
     if "investing" == get_in(data, [:pairs, pair_id, :pair_state]) do
       put_in(data, [:pairs, pair_id, :pair_state], "responding")
       |> put_in([:pairs, pair_id, :inv_final], inv_final)
-      |> Actions.finish_investing(target_id, pair_id, inv_final)
     else
       data
     end
@@ -33,7 +56,7 @@ defmodule TrustGame.Participant do
     pair_id = get_in(data, [:participants, id, :pair_id])
     target_id = getTargetId(data, id)
     if "responding" == get_in(data, [:pairs, pair_id, :pair_state]) do
-      Actions.sync_res_temp(data, target_id, res_temp)
+      put_in(data, [:pairs, pair_id, :res_temp], res_temp)
     else
       data
     end
@@ -70,10 +93,16 @@ defmodule TrustGame.Participant do
       |> put_in([:pairs, pair_id, :pair_state], next_state)
       |> put_in([:pairs, pair_id, :inv_temp], 0)
       |> put_in([:pairs, pair_id, :res_temp], 0)
-      |> Actions.finish_responding(id, target_id, pair_id, res_final)
     else
       data
     end
+    |> compute_game_progress
+  end
+
+  defp compute_game_progress(data) do
+    size = Map.size(data.pairs)
+    finished = Enum.count(data.pairs, fn {_id, %{pair_state: state}} -> state == "finished" end)
+    Map.put(data, :game_progress, round(100 * finished / size))
   end
 
   def getNextRole(role) do
@@ -98,45 +127,6 @@ defmodule TrustGame.Participant do
     case pair_round < game_round do
       true -> pair_round + 1
       false -> pair_round
-    end
-  end
-
-
-  def format_participant(participant), do: participant
-
-  def format_data(data) do
-    %{
-      game_page: data.game_page,
-      game_round: data.game_round,
-      game_point: data.game_point,
-      game_rate: data.game_rate,
-      game_progress: data.game_progress,
-    }
-  end
-
-  def format_pair(pair) do
-    %{
-      members: pair.members,
-      pair_round: pair.pair_round,
-      inv_temp: pair.inv_temp,
-      inv_final: pair.inv_final,
-      res_temp: pair.res_temp,
-      pair_state: pair.pair_state,
-    }
-  end
-
-  def format_contents(data, id) do
-    %{participants: participants} = data
-    participant = Map.get(participants, id)
-    pair_id = get_in(data, [:participants, id, :pair_id])
-    unless is_nil(pair_id) do
-      pair = get_in(data, [:pairs, pair_id])
-      format_participant(participant)
-      |> Map.merge(format_data(data))
-      |> Map.merge(format_pair(pair))
-    else
-      format_participant(participant)
-      |> Map.merge(format_data(data))
     end
   end
 end
