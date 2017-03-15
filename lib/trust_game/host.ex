@@ -55,6 +55,10 @@ defmodule TrustGame.Host do
     %{data | game_rate: game_rate}
   end
 
+  def change_game_question(data, text) do
+    %{data | question: text}
+  end
+
   def match(data) do
     %{participants: participants} = data
     participants = participants

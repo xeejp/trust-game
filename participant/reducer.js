@@ -20,6 +20,7 @@ import {
 } from './actions.js'
 
 const initialState = {
+  question: '',
   point: 0,
   role: "visitor",
   pair_id: null,

@@ -7,6 +7,20 @@ defmodule TrustGame do
   alias TrustGame.Main
   alias TrustGame.Actions
 
+  @question """
+  <h2>信頼ゲーム</h2>
+  <h3>ルールの説明"</h3>
+  <p>あなたは誰かとペアになって実験を行います。<br>
+  参加者には2つの役割があり、今回は{round}回の役割交代があります。</p>
+  <h4>投資者</h4>
+  <p>ポイントをどれだけ相手に投資するか決定できる</p>
+  <h4>応答者</h4>
+  <p>ポイントをどれだけ相手に返すか決定できる</p>
+  <p>はじめに投資者に{point}ポイントが配られます。<br>
+  投資者が投資したポイントは仲介者が{rate}倍にして応答者に送られます。<br>
+  応答者が投資者に返すポイントを決定したらそのラウンドは終了し、累計ポイントに加算されます。</p>
+  """
+
   # Callbacks
   def script_type do
     :message
@@ -16,16 +30,16 @@ defmodule TrustGame do
 
   def init do
     {:ok, %{data: %{
-        game_page: "waiting",
-        game_round: 1,
-        game_point: 10,
-        game_rate: 3,
-        game_progress: 0,
-        participants: %{},
-        pairs: %{},
-        trust_results: %{},
-      }
-    }}
+      question: @question,
+      game_page: "waiting",
+      game_round: 1,
+      game_point: 10,
+      game_rate: 3,
+      game_progress: 0,
+      participants: %{},
+      pairs: %{},
+      trust_results: %{},
+    }}}
   end
 
   def join(data, id) do
@@ -49,6 +63,7 @@ defmodule TrustGame do
       {"CHANGE_GAME_ROUND", game_round} -> Host.change_game_round(data, game_round)
       {"CHANGE_GAME_POINT", game_point} -> Host.change_game_point(data, game_point)
       {"CHANGE_GAME_RATE", game_rate} -> Host.change_game_rate(data, game_rate)
+      {"CHANGE_QUESTION", text} -> Host.change_game_question(data, text)
       _ -> {:ok, %{data: data}}
     end
     wrap_result(data, result)

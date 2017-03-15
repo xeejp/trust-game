@@ -9,6 +9,7 @@ import {
   changeGameRound,
   changeGamePoint,
   changeGameRate,
+  changeQuestion
 } from './actions.js'
 
 import {
@@ -60,6 +61,13 @@ function* changeGamePointSaga() {
   }
 }
 
+function* changeQuestionSaga() {
+  while(true) {
+    const { payload } = yield take(`${changeQuestion}`)
+    sendData('CHANGE_QUESTION', payload)
+  }
+}
+
 function* saga() {
   yield fork(fetchContentsSaga)
   yield fork(matchSaga)
@@ -67,6 +75,7 @@ function* saga() {
   yield fork(changeGameRoundSaga)
   yield fork(changeGameRateSaga)
   yield fork(changeGamePointSaga)
+  yield fork(changeQuestionSaga)
 }
 
 export default saga

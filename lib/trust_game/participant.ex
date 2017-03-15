@@ -4,6 +4,7 @@ defmodule TrustGame.Participant do
   def filter_data(data, id) do
     pair_id = get_in(data, [:participants, id, :pair_id])
     rule = %{
+      question: true,
       game_page: true,
       game_round: true,
       game_point: true,
