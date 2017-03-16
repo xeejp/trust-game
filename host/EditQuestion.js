@@ -45,6 +45,7 @@ class EditQuestion extends Component {
     const { dispatch } = this.props
     const { text } = this.state
     dispatch(changeQuestion(text))
+    this.handleClose()
   }
 
   render(){

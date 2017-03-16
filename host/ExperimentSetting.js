@@ -66,6 +66,7 @@ class ExperimentSetting extends Component {
     dispatch(changeGameRound(game_round_temp))
     dispatch(changeGameRate(game_rate_temp))
     dispatch(changeGamePoint(game_point_temp));
+    this.handleClose()
   }
 
   handleNothing = (event) => {}
