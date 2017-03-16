@@ -15,7 +15,7 @@ import {
   syncInvTemp,
   finishInvesting,
 } from '../actions.js'
-import Slider from '../Slider.js'
+import { Slider } from 'xee-components'
 
 const mapStateToProps = ({ role, inv_temp, game_point, game_rate }) => ({
   role,

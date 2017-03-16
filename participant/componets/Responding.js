@@ -15,7 +15,7 @@ import {
   syncResTemp,
   finishResponding,
 } from '../actions.js'
-import Slider from '../Slider.js'
+import { Slider } from 'xee-components'
 
 const mapStateToProps = ({ inv_final, res_temp, role, game_point, game_rate }) => ({
   inv_final, res_temp, role, game_point, game_rate,
