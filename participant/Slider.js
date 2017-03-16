@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-import { blue400, grey400 } from 'material-ui/styles/colors'
+import { blue400, pink400 } from 'material-ui/styles/colors'
 
 const Panel = ({ selected, onClick, first = false, last = false }) => {
-  const color = selected ? blue400 : grey400
+  const color = selected ? blue400 : pink400
   const clear = first ? 'left' : null
   const style = {
     float: 'left', clear,
@@ -11,7 +11,7 @@ const Panel = ({ selected, onClick, first = false, last = false }) => {
     width: '10%',
     height: '100%',
     borderLeft: first ? '3px solid black' : null,
-    borderRight: '3px solid black',
+    borderRight: last ? '3px solid black' : '3px dotted black',
     borderTop: '3px solid black',
     borderBottom: '3px solid black'
   }

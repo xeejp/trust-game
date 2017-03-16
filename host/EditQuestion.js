@@ -55,6 +55,7 @@ class EditQuestion extends Component {
         label="適用"
         primary={true}
         onTouchTap={this.handleConfirm}
+        style={{marginRight: "10px",}}
       />,
       <RaisedButton
         label="終了"

@@ -4,6 +4,10 @@ import { connect } from 'react-redux'
 import Chip from 'material-ui/chip';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton';
+import { pink400, blue400, orange400 } from 'material-ui/styles/colors';
+import Avatar from 'material-ui/Avatar'
+import List from 'material-ui/List/List'
+import ListItem from 'material-ui/List/ListItem'
 
 import { getRoleName } from '../../util/index.js'
 
@@ -53,17 +57,37 @@ class Investing extends Component {
             subtitle={"投資ポイントを選択してください。"}
           />
           <CardText>
-            <span style={{margin: 8}}>
-              <p>手もとに残るポイント: {game_point - inv_temp}ポイント</p>
-              <p>相手に渡すポイント: {inv_temp}ポイント</p>
-            </span>
-            <Slider
-              min={0}
-              max={game_point}
-              divisor={10}
-              value={inv_temp}
-              onChange={this.handleThinking}
-            />
+            <List>
+              <ListItem>
+                <p>手もとに残るポイント</p>
+                <Avatar
+                  backgroundColor={pink400}
+                  size={50}
+                  style={{margin: 5}}
+                >
+                  {game_point - inv_temp}
+                </Avatar>ポイント
+              </ListItem>
+              <ListItem>
+                <p>相手に渡すポイント</p>
+                <Avatar
+                  backgroundColor={blue400}
+                  size={50}
+                  style={{margin: 5}}
+                >
+                  {inv_temp}
+                </Avatar>ポイント
+              </ListItem>
+              <ListItem>
+                <Slider
+                  min={0}
+                  max={game_point}
+                  divisor={10}
+                  value={inv_temp}
+                  onChange={this.handleThinking}
+                />
+              </ListItem>
+            </List>
           </CardText>
           <CardActions>
             <RaisedButton
