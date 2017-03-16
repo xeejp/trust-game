@@ -7,6 +7,7 @@ import Snackbar from 'material-ui/Snackbar'
 import Finished from './componets/Finished.js'
 import Investing from './componets/Investing.js'
 import Responding from './componets/Responding.js'
+import Notice from './Notice.js'
 
 import {
   fallSnackBarFlags,
@@ -115,10 +116,9 @@ class Respond extends Component {
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
-          <Snackbar
+          <Notice
             open={change_role_flag}
             message={"役割交代によりあなたは" + getRoleName(role) + "になりました。実験を続けてください。"}
-            autoHideDuration={4000}
             onRequestClose={this.handleRequestClose2}
           />
         </div>
