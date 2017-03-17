@@ -10,6 +10,7 @@ import Responding from './componets/Responding.js'
 import Notice from './Notice.js'
 
 import {
+  noticeRoleChanged,
   fallSnackBarFlags,
   fallSnackBarFlags2,
 } from './actions.js'
@@ -80,6 +81,12 @@ class Respond extends Component {
         return <Responding />
       case "finished":
         return  <Finished />
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.role !== this.props.role && props.role === "investor") {
+      this.props.dispatch(noticeRoleChanged())
     }
   }
 

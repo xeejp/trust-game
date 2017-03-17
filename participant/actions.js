@@ -12,5 +12,6 @@ export const finishInvesting = createAction('FINISH_INVESTING')
 export const syncResTemp = createAction('SYNC_RES_TEMP')
 export const finishResponding = createAction('FINISH_RESPONDING')
 
+export const noticeRoleChanged = createAction('NOTICE_ROLE_CHANGED')
 export const fallSnackBarFlags = createAction('FALL_SNACK_BAR_FLAGS')
 export const fallSnackBarFlags2 = createAction('FALL_SNACK_BAR_FLAGS2')

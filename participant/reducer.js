@@ -15,6 +15,7 @@ import {
   finishInvesting,
   syncResTemp,
   finishResponding,
+  noticeRoleChanged,
   fallSnackBarFlags,
   fallSnackBarFlags2,
 } from './actions.js'
@@ -88,8 +89,8 @@ const reducer = concatenateReducers([
       res_final: payload,
       responded_flag: true,
     }),
-
-    [fallSnackBarFlags]: ({ pair_state }) => ({ invested_flag: false, responded_flag: false, change_role_flag: pair_state == "investing" }),
+    [noticeRoleChanged]: () => ({change_role_flag: true}),
+    [fallSnackBarFlags]: ({ pair_state }) => ({ invested_flag: false, responded_flag: false }),
     [fallSnackBarFlags2]: ({}) => ({ change_role_flag: false }),
     [changeChartRound]: (_, { payload }) => ({ chart_round: payload, chart_button: true }),
     [fallChartButton]: () => ({ chart_button: false}),
