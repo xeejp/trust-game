@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import Chip from 'material-ui/chip';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
-import { pink400, blue400, orange400 } from 'material-ui/styles/colors';
 import Avatar from 'material-ui/Avatar'
 import List from 'material-ui/List/List'
 import ListItem from 'material-ui/List/ListItem'
+
+import HoldPoint from '../HoldPoint.js'
+import PassPoint from '../PassPoint.js'
 
 import { getRoleName } from 'util/index'
 
@@ -39,7 +41,7 @@ class Responding extends Component {
   }
 
   render() {
-    const { role, inv_final, res_temp, game_point, game_rate } = this.props
+    const { role, inv_final, res_temp, game_rate, game_point } = this.props
     const styles = {
       rised: {
         margin: 12,
@@ -61,41 +63,17 @@ class Responding extends Component {
             <CardText>
               <List>
                 <ListItem>
-                  <p>相手に渡したポイント</p>
-                  <Avatar
-                    backgroundColor={blue400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {inv_final}
-                  </Avatar>ポイント
+                  <PassPoint
+                    point={inv_final}
+                    text='相手が受け取ったポイント'
+                    rate={game_rate}
+                  />
                 </ListItem>
                 <ListItem>
-                  <p>相手が受け取ったポイント</p>
-                  <Avatar
-                    backgroundColor={blue400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {inv_final}
-                  </Avatar>×{game_rate}倍＝
-                  <Avatar
-                    backgroundColor={blue400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {inv_final*game_rate}
-                  </Avatar>ポイント
-                </ListItem>
-                <ListItem>
-                  <p>手もとに残ったポイント</p>
-                  <Avatar
-                    backgroundColor={pink400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {game_point-inv_final}
-                  </Avatar>ポイント
+                  <HoldPoint
+                    point={game_point - inv_final}
+                    text='手もとに残ったポイント'
+                  />
                 </ListItem>
               </List>
               <span style={{display: "flex", flexWrap: "wrap"}}>
@@ -112,21 +90,11 @@ class Responding extends Component {
             <CardText>
               <List>
                 <ListItem>
-                  <p>相手から受け取ったポイント</p>
-                  <Avatar
-                    backgroundColor={blue400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {inv_final}
-                  </Avatar>×{game_rate}倍＝
-                  <Avatar
-                    backgroundColor={pink400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {inv_final*game_rate}
-                  </Avatar>
+                  <PassPoint
+                    text='相手から受け取ったポイント'
+                    point={inv_final}
+                    rate={game_rate}
+                  />
                 </ListItem>
                 <ListItem>
                   <Slider
@@ -140,24 +108,16 @@ class Responding extends Component {
                   />
                 </ListItem>
                 <ListItem>
-                  <p>手もとに残るポイント</p>
-                  <Avatar
-                    backgroundColor={pink400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {inv_final * game_rate - res_temp}
-                  </Avatar>ポイント
+                  <HoldPoint
+                    point={inv_final * game_rate - res_temp}
+                    text='手もとに残るポイント'
+                  />
                 </ListItem>
                 <ListItem>
-                  <p>相手に渡すポイント</p>
-                  <Avatar
-                    backgroundColor={blue400}
-                    size={50}
-                    style={{margin: 5}}
-                  >
-                    {res_temp}
-                  </Avatar>ポイント
+                  <PassPoint
+                    point={res_temp}
+                    text='相手に渡すポイント'
+                  />
                 </ListItem>
               </List>
             </CardText>

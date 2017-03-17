@@ -4,18 +4,17 @@ import { connect } from 'react-redux'
 import Chip from 'material-ui/chip';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton';
-import { pink400, blue400, orange400 } from 'material-ui/styles/colors';
-import Avatar from 'material-ui/Avatar'
 import List from 'material-ui/List/List'
 import ListItem from 'material-ui/List/ListItem'
+import { Slider } from 'xee-components'
 
 import { getRoleName } from '../../util/index.js'
-
+import HoldPoint from '../HoldPoint.js'
+import PassPoint from '../PassPoint.js'
 import {
   syncInvTemp,
   finishInvesting,
 } from '../actions.js'
-import { Slider } from 'xee-components'
 
 const mapStateToProps = ({ role, inv_temp, game_point, game_rate }) => ({
   role,
@@ -59,24 +58,16 @@ class Investing extends Component {
           <CardText>
             <List>
               <ListItem>
-                <p>手もとに残るポイント</p>
-                <Avatar
-                  backgroundColor={pink400}
-                  size={50}
-                  style={{margin: 5}}
-                >
-                  {game_point - inv_temp}
-                </Avatar>ポイント
+                <HoldPoint
+                  point={game_point - inv_temp}
+                  text='手もとに残るポイント'
+                />
               </ListItem>
               <ListItem>
-                <p>相手に渡すポイント</p>
-                <Avatar
-                  backgroundColor={blue400}
-                  size={50}
-                  style={{margin: 5}}
-                >
-                  {inv_temp}
-                </Avatar>ポイント
+                <PassPoint
+                  point={inv_temp}
+                  text='相手に渡すポイント'
+                />
               </ListItem>
               <ListItem>
                 <Slider

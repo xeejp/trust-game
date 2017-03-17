@@ -32,6 +32,7 @@ defmodule TrustGame.Main do
       res_temp: 0,
       res_final: nil,
       pair_state: "investing",
+      pair_results: [],
     }
   end
 end

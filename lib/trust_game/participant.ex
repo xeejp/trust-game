@@ -4,6 +4,7 @@ defmodule TrustGame.Participant do
   def filter_data(data, id) do
     pair_id = get_in(data, [:participants, id, :pair_id])
     rule = %{
+      pair_results: true,
       question: true,
       game_page: true,
       game_round: true,
@@ -25,6 +26,7 @@ defmodule TrustGame.Participant do
     data
     |> Transmap.transform(rule)
     |> Map.put(:participants_length, Map.size(data.participants))
+    |> Map.put(:id, id)
   end
 
   require Logger
@@ -95,6 +97,9 @@ defmodule TrustGame.Participant do
       |> put_in([:pairs, pair_id, :pair_state], next_state)
       |> put_in([:pairs, pair_id, :inv_temp], 0)
       |> put_in([:pairs, pair_id, :res_temp], 0)
+      |> update_in([:pairs, pair_id, :pair_results], fn list ->
+        [%{investor: target_id, inv: inv_final, res: res_final} | list]
+      end)
     else
       data
     end
