@@ -31,10 +31,23 @@ class ExperimentSetting extends Component {
     this.handleConfirm = this.handleConfirm.bind(this)
     this.state = {
       open: false,
-      game_round_temp: 1,
-      game_rate: 3,
-      game_point: 10,
+      game_round_temp: 0,
+      game_rate: 0,
+      game_point: 0,
     }
+  }
+
+  componentWillReceiveProps(props) {
+    const { game_round, game_rate, game_point } = props
+    const open = this.state.game_round_temp !== game_round
+      || this.state.game_rate_temp !== game_rate
+      || this.state.game_point_temp !== game_point
+    this.setState({
+      open,
+      game_round_temp: game_round,
+      game_rate_temp: game_rate,
+      game_point_temp: game_point,
+    })
   }
 
   componentDidMount() {
