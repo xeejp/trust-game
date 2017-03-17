@@ -16,8 +16,27 @@ import { fallChartButton, changeChartRound } from 'host/actions.js'
 
 function compCate(results, round) {
   const keys = results[round]? Object.keys(results[round]) : []
-  return keys.sort((a, b) => (results[round][b]["hold"] + results[round][b]["return"])
-    - (results[round][a]["hold"] + results[round][a]["return"]))
+  return keys.sort((a, b) => {
+    const aHold = results[round][a]["hold"]
+    const aReturn = results[round][a]["return"]
+    const bHold = results[round][b]["hold"]
+    const bReturn = results[round][b]["return"]
+    // Asc by hold
+    if (aHold < bHold) {
+      return -1
+    } else if (aHold > bHold) {
+      return 1
+    } else {
+      // Desc by return
+      if (aReturn > bReturn) {
+        return -1
+      } else if (aReturn < bReturn) {
+        return 1
+      } else {
+        return 0
+      }
+    }
+  })
 }
 
 function compData(categories, results, round) {
@@ -179,7 +198,7 @@ class Chart extends Component {
     const charts = []
     for(let i = 0; i < (config? config.length : 0); i ++) {
       charts[i] = (
-        <div>
+        <div key={i}>
           <Highcharts config={config[i]} callback={this.handleCallback}></Highcharts>
         </div>
       )
