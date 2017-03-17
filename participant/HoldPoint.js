@@ -2,6 +2,8 @@ import React from 'react'
 import Avatar from 'material-ui/Avatar'
 import { pink400 } from 'material-ui/styles/colors';
 
+import Point from '../components/Point.js'
+
 const HoldPoint = ({ point, text }) => {
   return (
     <span>
@@ -11,7 +13,7 @@ const HoldPoint = ({ point, text }) => {
         size={50}
         style={{margin: 5}}
       >
-        {point}
+        <Point>{point}</Point>
       </Avatar>ポイント
     </span>
   )
