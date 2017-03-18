@@ -21,10 +21,10 @@ function compCate(results, round) {
     const aReturn = results[round][a]["return"]
     const bHold = results[round][b]["hold"]
     const bReturn = results[round][b]["return"]
-    // Asc by hold
-    if (aHold < bHold) {
+    // Desc by hold + return
+    if (aHold + aReturn > bHold + bReturn) {
       return -1
-    } else if (aHold > bHold) {
+    } else if (aHold + aReturn < bHold + bReturn) {
       return 1
     } else {
       // Desc by return
