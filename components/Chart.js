@@ -47,8 +47,8 @@ function compData(categories, results, round) {
     results[round][pair_id]? results[round][pair_id]["return"] : 0) : []
   return [
     {
-      name: "返却したポイント",//[1,0]
-      data: Array.from(categories).map(p_id => (return_values[p_id]? return_values[p_id] : 0)),
+      name: "残したポイント",
+      data: Array.from(categories).map(p_id => (hold_values[p_id]? hold_values[p_id] : 0)),
       stack: "pair",
       tooltip: {
         valueSuffix: " [ポイント]"
@@ -56,8 +56,8 @@ function compData(categories, results, round) {
     }
   ].concat([
     {
-      name: "残したポイント",
-      data: Array.from(categories).map(p_id => (hold_values[p_id]? hold_values[p_id] : 0)),
+      name: "返却したポイント",//[1,0]
+      data: Array.from(categories).map(p_id => (return_values[p_id]? return_values[p_id] : 0)),
       stack: "pair",
       tooltip: {
         valueSuffix: " [ポイント]"
