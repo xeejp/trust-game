@@ -27,10 +27,10 @@ function compCate(results, round) {
     } else if (aHold + aReturn > bHold + bReturn) {
       return 1
     } else {
-      // Asc by return
-      if (aReturn > bReturn) {
+      // Desc by return
+      if (aReturn < bReturn) {
         return -1
-      } else if (aReturn < bReturn) {
+      } else if (aReturn > bReturn) {
         return 1
       } else {
         return 0
@@ -69,7 +69,7 @@ function compData(categories, results, round) {
       name: "戻された割合",
       data: Array.from(categories).map(p_id => (
         (hold_values[p_id] + return_values[p_id] > 0 ) ?
-          Math.round(hold_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0)),
+          Math.round(return_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0)),
       type: "spline",
       dashStyle: "shortdot",
       tooltip: {
