@@ -21,16 +21,16 @@ function compCate(results, round) {
     const aReturn = results[round][a]["return"]
     const bHold = results[round][b]["hold"]
     const bReturn = results[round][b]["return"]
-    // Desc by hold + return
-    if (aHold + aReturn > bHold + bReturn) {
+    // Asc by hold + return
+    if (aHold + aReturn < bHold + bReturn) {
       return -1
-    } else if (aHold + aReturn < bHold + bReturn) {
+    } else if (aHold + aReturn > bHold + bReturn) {
       return 1
     } else {
-      // Desc by return
-      if (aReturn < bReturn) {
+      // Asc by return
+      if (aReturn > bReturn) {
         return -1
-      } else if (aReturn > bReturn) {
+      } else if (aReturn < bReturn) {
         return 1
       } else {
         return 0
@@ -68,8 +68,8 @@ function compData(categories, results, round) {
       yAxis: 1,
       name: "戻された割合",
       data: Array.from(categories).map(p_id => (
-        hold_values[p_id] && return_values[p_id]?
-          Math.round(return_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0)),
+        (hold_values[p_id] + return_values[p_id] > 0 ) ?
+          Math.round(hold_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0)),
       type: "spline",
       dashStyle: "shortdot",
       tooltip: {
@@ -92,7 +92,7 @@ const mapStateToProps = ({ trust_results, chart_button, chart_round, role }) => 
         href: 'https://xee.jp/'
       },
       title: {
-        text: "応答者の分配"
+        text: "応答者の反応"
       },
       xAxis: {
         categories: compCate(trust_results, i+1),
