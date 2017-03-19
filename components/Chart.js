@@ -28,9 +28,9 @@ function compCate(results, round) {
       return 1
     } else {
       // Desc by return
-      if (aReturn > bReturn) {
+      if (aReturn < bReturn) {
         return -1
-      } else if (aReturn < bReturn) {
+      } else if (aReturn > bReturn) {
         return 1
       } else {
         return 0
