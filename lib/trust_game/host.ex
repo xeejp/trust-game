@@ -55,6 +55,10 @@ defmodule TrustGame.Host do
     %{data | game_rate: game_rate}
   end
 
+  def visit(data) do
+    %{data | isFirstVisit: false}
+  end
+
   def change_game_question(data, text) do
     %{data | question: text}
   end

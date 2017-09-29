@@ -36,6 +36,7 @@ defmodule TrustGame do
       game_point: 10,
       game_rate: 3,
       game_progress: 0,
+      isFirstVisit: true,
       participants: %{},
       pairs: %{},
       trust_results: %{},
@@ -63,6 +64,7 @@ defmodule TrustGame do
       {"CHANGE_GAME_ROUND", game_round} -> Host.change_game_round(data, game_round)
       {"CHANGE_GAME_POINT", game_point} -> Host.change_game_point(data, game_point)
       {"CHANGE_GAME_RATE", game_rate} -> Host.change_game_rate(data, game_rate)
+      {"VISIT", _} -> Host.visit(data)
       {"CHANGE_QUESTION", text} -> Host.change_game_question(data, text)
       _ -> {:ok, %{data: data}}
     end

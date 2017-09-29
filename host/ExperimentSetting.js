@@ -9,12 +9,13 @@ import Dialog from 'material-ui/Dialog';
 
 import Counter from 'components/Counter'
 
-import { changeGameRound, changeGameRate , changeGamePoint} from './actions.js'
+import { changeGameRound, changeGameRate , changeGamePoint, visit } from './actions.js'
 
-const mapStateToProps = ({ game_round, game_rate, game_point, game_page }) => ({  game_round,
+const mapStateToProps = ({ game_round, game_rate, game_point, game_page, isFirstVisit }) => ({  game_round,
   game_rate,
   game_point,
   game_page,
+  isFirstVisit,
 })
 
 const styles = {
@@ -38,16 +39,24 @@ class ExperimentSetting extends Component {
   }
 
   componentWillReceiveProps(props) {
-    const { game_round, game_rate, game_point } = props
-    const open = this.state.game_round_temp !== game_round
-      || this.state.game_rate_temp !== game_rate
-      || this.state.game_point_temp !== game_point
-    this.setState({
-      open,
-      game_round_temp: game_round,
-      game_rate_temp: game_rate,
-      game_point_temp: game_point,
-    })
+    const { game_round, game_rate, game_point, isFirstVisit } = props
+    if(isFirstVisit) {
+      this.setState({
+        open: true,
+        game_round_temp: game_round,
+        game_rate_temp: game_rate,
+        game_point_temp: game_point,
+      })
+      const { dispatch } = this.props
+      dispatch(visit())
+    }
+    else {
+      this.setState({
+        game_round_temp: game_round,
+        game_rate_temp: game_rate,
+        game_point_temp: game_point,
+      })
+    }
   }
 
   componentDidMount() {

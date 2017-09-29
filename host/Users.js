@@ -8,17 +8,19 @@ import { getRoleName, getStateName } from '../util/index.js'
 
 import { openParticipantPage } from './actions'
 
-const User = ({ id, role, point, pair_id, openParticipantPage }) => (
+const User = ({ id, role, point, pair_id, round, state, page, openParticipantPage }) => (
   <tr><td><a onClick={openParticipantPage(id)}>{id}</a></td>
-  <td>{getRoleName(role)}</td>
-  <td>{point}</td>
-  <td>{pair_id}</td>
+  <td>{page != "waiting"? getRoleName(role) : "-"}</td>
+  <td>{page != "waiting" && role != "visitor"? point : "-"}</td>
+  <td>{page != "waiting" && role != "visitor"? pair_id : "-"}</td>
+  <td>{round && page == "experiment"? round : "-"}</td>
+  <td>{state && page == "experiment"? getStateName(state) : "-"}</td>
   </tr>
 )
 
-const UsersList = ({participants, openParticipantPage }) => (
+const UsersList = ({participants, pairs, page, openParticipantPage }) => (
   <table>
-    <thead><tr><th>ID</th><th>役割</th><td>ポイント</td><td>所属ペアID</td></tr></thead>
+    <thead><tr><th>ID</th><th>役割</th><td>ポイント</td><td>所属ペアID</td><td>ラウンド</td><td>状態</td></tr></thead>
     <tbody>
       {
         Object.keys(participants).sort((id1, id2) => {
@@ -34,6 +36,9 @@ const UsersList = ({participants, openParticipantPage }) => (
             role={participants[id].role}
             point={participants[id].point}
             pair_id={participants[id].pair_id}
+            round={pairs[participants[id].pair_id]? pairs[participants[id].pair_id].pair_round : null}
+            state={pairs[participants[id].pair_id]? pairs[participants[id].pair_id].pair_state : null}
+            page={page}
             openParticipantPage={openParticipantPage}
           />
         ))
@@ -65,8 +70,8 @@ const Pairs = ({ pairs, participants, game_round}) => (
   </table>
 )
 
-const mapStateToProps = ({ pairs, participants, game_round }) => ({
-  pairs, participants, game_round
+const mapStateToProps = ({ pairs, participants, game_round, game_page }) => ({
+  pairs, participants, game_round, game_page
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -76,7 +81,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const Users = ({ pairs, participants, game_round, openParticipantPage }) => (
+const Users = ({ pairs, participants, game_round, game_page, openParticipantPage }) => (
   <div>
     <Card style={{margin: '16px 16px'}}>
       <CardHeader
@@ -87,6 +92,8 @@ const Users = ({ pairs, participants, game_round, openParticipantPage }) => (
       <CardText expandable={true}>
         <UsersList
           participants={participants}
+          pairs={pairs}
+          page={game_page}
           openParticipantPage={openParticipantPage}
         />
       </CardText>
