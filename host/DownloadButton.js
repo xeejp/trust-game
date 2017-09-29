@@ -15,26 +15,26 @@ const DownloadButton = ({ participants, trust_results, game_point, game_rate, ga
     onClick={() => {
       var fileName = "trust_game" + new Date() + ".csv"
 
-      var content 
-      = "信頼ゲーム\n" 
-      + "実験日," + new Date() + "\n"
-      + "初期ポイント数," + game_point + "ポイント\n"
-      + "レート," + game_rate + "倍\n"
-      + "ターン数," + game_round + "ターン\n"
-      + "登録者数," + Object.keys(participants).length + "\n\n"
-      + "ID,ペア番号,最終ポイント,役割\n"
-      + Object.keys(participants).map(id => [id,
-                                             participants[id].pair_id,
-                                             participants[id].point,
-                                             participants[id].role].join(',')).join("\n")
-      + "\nターン数,ペア番号,応答者が受け取ったポイント,応答者が手もとに残したポイント,応答者が返却したポイント\n"
-      + Object.keys(trust_results).map(id2 => [
-                                               Object.keys(trust_results[id2]).map(id3 => [id2,
-                                                                                           id3,
-                                                                                           trust_results[id2][id3].hold + trust_results[id2][id3].return,
-                                                                                           trust_results[id2][id3].hold,
-                                                                                           trust_results[id2][id3].return].join(',')).join("\n")].join(',')).join("\n");
-      
+      var content = [
+      ["信頼ゲーム"],
+      ["実験日", new Date()],
+      ["初期ポイント数", game_point + "ポイント"],
+      ["レート", game_rate + "倍"],
+      ["ターン数", game_round + "ターン"],
+      ["登録者数", Object.keys(participants).length],
+      [],
+      ["ID", "ペア番号", "最終ポイント", "役割"]].concat(
+      Object.keys(participants).map(id => [id,
+                                           participants[id].pair_id,
+                                           participants[id].point,
+                                           participants[id].role])).concat([
+      ["ターン数", "ペア番号", "応答者が受け取ったポイント", "応答者が手もとに残したポイント", "応答者が返却したポイント"]]).concat(
+      Object.keys(trust_results).map(id2 => 
+        Object.keys(trust_results[id2]).map(id3 => [id2,
+                                                    id3,
+                                                    trust_results[id2][id3].hold + trust_results[id2][id3].return,
+                                                    trust_results[id2][id3].hold,
+                                                    trust_results[id2][id3].return])).reduce((a, b) => a.concat(b), [])).map(ls => ls.join(',')).join('\n')
       var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
       var blob = new Blob([bom,content]);
       var url = window.URL || window.webkitURL;
