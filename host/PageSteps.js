@@ -20,6 +20,8 @@ import {
   exitLoading,
 } from './actions'
 
+import { ReadJSON } from '../util/ReadJSON'
+
 
 const mapStateToProps = ({ game_page, game_round, game_progress, pairs, loading }) => ({
   game_page,
