@@ -15,14 +15,11 @@ const mapStateToProps = ({ question, game_round, game_rate, game_point }) => ({
 class Description extends Component {
   render() {
     const { question, game_round, game_rate, game_point } = this.props
-    const text = question
-      .replace('{round}', game_round-1)
-      .replace('{point}', game_point)
-      .replace('{rate}', game_rate)
     return (
       <Card>
+        <CardTitle title={"信頼ゲーム"} subtitle={"ルール説明"} />
         <CardText>
-          <div dangerouslySetInnerHTML={{__html: text}} />
+          <p>{question}</p>
         </CardText>
       </Card>
     )
