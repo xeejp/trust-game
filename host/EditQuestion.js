@@ -7,8 +7,9 @@ import ImageEdit from 'material-ui/svg-icons/image/edit'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 
-import Description from '../participant/Description'
 import { changeQuestion } from './actions.js'
+
+import { ReadJSON } from '../util/ReadJSON'
 
 const mapStateToProps = ({ question }) => ({ question })
 
@@ -53,13 +54,13 @@ class EditQuestion extends Component {
     const { text } = this.state
     const actions = [
       <RaisedButton
-        label="適用"
+        label={ReadJSON().static_text["apply"]}
         primary={true}
         onTouchTap={this.handleConfirm}
         style={{marginRight: "10px",}}
       />,
       <RaisedButton
-        label="終了"
+        label={ReadJSON().static_text["end"]}
         onTouchTap={this.handleClose}
       />,
     ]
@@ -70,7 +71,7 @@ class EditQuestion extends Component {
           <ImageEdit />
         </FloatingActionButton>
         <Dialog
-          title="問題文編集"
+          title={ReadJSON().static_text["edit"]}
           actions={actions}
           modal={true}
           open={this.state.open}
@@ -84,8 +85,6 @@ class EditQuestion extends Component {
             multiLine={true}
             fullWidth={true}
           />
-          <h3>プレビュー</h3>
-          <Description />
         </Dialog>
       </span>
     )

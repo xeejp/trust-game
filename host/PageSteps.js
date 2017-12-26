@@ -85,13 +85,13 @@ class PageSteps extends React.Component {
     return (
       <div style={{margin: '16px 18px'}}>
         <FlatButton
-          label="戻る"
+          label={ReadJSON().static_text["back"]}
           disabled={game_pages[0] == game_page}
           onClick={this.handlePrev}
           style={{marginRight: "12px"}}
         />
         <RaisedButton
-          label={game_pages[3] === game_page ? '実験を続ける' : '次へ'}
+          label={game_pages[3] === game_page ? ReadJSON().static_text["continue"] : ReadJSON().static_text["next"]}
           primary={true}
           onClick={this.handleNext}
         />

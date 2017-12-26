@@ -11,6 +11,8 @@ import Counter from 'components/Counter'
 
 import { changeGameRound, changeGameRate , changeGamePoint, visit } from './actions.js'
 
+import { ReadJSON } from '../util/ReadJSON'
+
 const mapStateToProps = ({ game_round, game_rate, game_point, game_page, isFirstVisit }) => ({  game_round,
   game_rate,
   game_point,
@@ -116,13 +118,13 @@ class ExperimentSetting extends Component {
     const { game_round_temp, game_rate_temp, game_point_temp } = this.state
     const actions = [
       <RaisedButton
-        label="適用"
+        label={ReadJSON().static_text["apply"]}
         primary={true}
         onTouchTap={this.handleConfirm}
         style={{marginRight: "10px",}}
       />,
       <RaisedButton
-        label="終了"
+        label={ReadJSON().static_text["end"]}
         onTouchTap={this.handleClose}
       />,
     ];
@@ -134,31 +136,31 @@ class ExperimentSetting extends Component {
             disabled={game_page != "waiting"}
           ><ActionSettings /></FloatingActionButton>
         <Dialog
-          title="実験設定"
+          title={ReadJSON().static_text["setting"]}
           actions={actions}
           modal={true}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
           <Counter
-            title="ゲームラウンド数"
+            title={ReadJSON().static_text["game_round_num"]}
             value={game_round_temp}
             min={1}
-            minTip="最小ラウンド"
+            minTip={ReadJSON().static_text["min_round"]}
             changeHandle={this.handleRound}
           />
           <Counter
-            title="仲介者レート"
+            title={ReadJSON().static_text["middle_rate"]}
             value={game_rate_temp}
             min={1}
-            minTip="最小レート"
+            minTip={ReadJSON().static_text["min_rate"]}
             changeHandle={this.handleRate}
           />
           <Counter
-            title="ラウンド開始時に配られるポイント"
+            title={ReadJSON().static_text["start_rate"]}
             value={game_point_temp}
             min={1}
-            minTip="最小ポイント"
+            minTip={ReadJSON().static_text["min_point"]}
             changeHandle={this.handlePoint}
           />
         </Dialog>

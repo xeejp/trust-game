@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "babel-polyfill": "^6.8.0",
+    "json-loader": "^0.5.7",
     "jsondiffpatch": "^0.2.4",
     "material-ui": "^0.16.7",
     "react": "^15.3.2",
