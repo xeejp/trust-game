@@ -4,6 +4,8 @@ import { pink400 } from 'material-ui/styles/colors';
 
 import Point from '../components/Point.js'
 
+import { ReadJSON } from '../util/ReadJSON'
+
 const HoldPoint = ({ point, text }) => {
   return (
     <span>
@@ -14,7 +16,7 @@ const HoldPoint = ({ point, text }) => {
         style={{margin: 5}}
       >
         <Point>{point}</Point>
-      </Avatar>ポイント
+      </Avatar>{ReadJSON().static_text["point"]}
     </span>
   )
 }

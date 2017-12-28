@@ -19,6 +19,8 @@ import {
   getRoleName,
 } from 'util/index'
 
+import { ReadJSON, InsertVariable } from '../util/ReadJSON'
+
 const mapStateToProps = ({
   pair_state, role,
   game_round, pair_round,
@@ -104,33 +106,33 @@ class Respond extends Component {
         <div>
         { pair_state != "finished"?
             <span>
-              <Chip style={styles.chip1}>ラウンド: {pair_round} / {game_round}</Chip>
-              <Chip style={styles.chip1}>{(game_round - pair_round) == 0? "最後のラウンド": "残り役割交代: " + (game_round - pair_round) + "回"}</Chip>
+              <Chip style={styles.chip1}>{InsertVariable(ReadJSON().static_text["pair_round"], { pair: pair_round, game: game_round})}</Chip>
+              <Chip style={styles.chip1}>{(game_round - pair_round) == 0? ReadJSON().static_text["final_round"] : InsertVariable(ReadJSON().static_text["remain_round"], { round: game_round - pair_round })}</Chip>
             </span>
-          : <Chip style={styles.chip2}>参加者全体の進捗: {Math.round(game_progress)} %</Chip>
+          : <Chip style={styles.chip2}>{InsertVariable(ReadJSON().static_text["progress"], { progress: Math.round(game_progress) })}</Chip>
         }
-        <Chip style={styles.chip2}>累計ポイント: {point}</Chip>
+        <Chip style={styles.chip2}>{InsertVariable(ReadJSON().static_text["total_point"], { point: point })}</Chip>
         <div style={styles.contents}>{this.renderContents()}</div>
           <Snackbar
             open={invested_flag}
-            message={inv_final + "ポイント" + (role=="investor"? "を投資しました。応答をお待ち下さい。" : "が投資されました。返却ポイントを決定してください。")}
+            message={InsertVariable(role=="investor"? ReadJSON().static_text["passed"] : ReadJSON().static_text["received"], { point: inv_final })}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
           <Snackbar
             open={responded_flag}
-            message={res_final + "ポイント" + (role=="investor"? "を返却しました。" : "が返却されました。")}
+            message={InsertVariable(role=="investor"? ReadJSON().static_text["return"] : ReadJSON().static_text["returned"], { point: inv_final })}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
           <Notice
             open={change_role_flag}
-            message={"役割交代によりあなたは" + getRoleName(role) + "になりました。実験を続けてください。"}
+            message={ReadJSON().static_text["role_change"]}
             onRequestClose={this.handleRequestClose2}
           />
         </div>
       :
-        <p>参加できませんでした。終了をお待ち下さい。</p>
+        <p>{ReadJSON().static_text["cant_join"]}</p>
     )
   }
 }

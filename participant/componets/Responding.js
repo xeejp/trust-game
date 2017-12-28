@@ -19,6 +19,8 @@ import {
 } from '../actions.js'
 import { Slider } from 'xee-components'
 
+import { ReadJSON } from '../../util/ReadJSON'
+
 const mapStateToProps = ({ inv_final, res_temp, role, game_point, game_rate }) => ({
   inv_final, res_temp, role, game_point, game_rate,
 })
@@ -57,41 +59,41 @@ class Responding extends Component {
         {role == "investor"?
           <Card>
             <CardHeader
-              title={"あなたは投資者です。"}
-              subtitle={"相手が返却ポイントを選択中です。しばらくお待ちください。"}
+              title={ReadJSON().static_text["role_investor"]}
+              subtitle={ReadJSON().static_text["return_wait"]}
             />
             <CardText>
               <List>
                 <ListItem>
                   <PassPoint
                     point={inv_final}
-                    text='相手が受け取ったポイント'
+                    text={ReadJSON().static_text["passed_point"]}
                     rate={game_rate}
                   />
                 </ListItem>
                 <ListItem>
                   <HoldPoint
                     point={game_point - inv_final}
-                    text='手もとに残ったポイント'
+                    text={ReadJSON().static_text["remained_point"]}
                   />
                 </ListItem>
               </List>
               <span style={{display: "flex", flexWrap: "wrap"}}>
-                <Chip style={{margin: 4}}>{res_temp? "相手は入力中です。": "相手は待機中です。"}</Chip>
+                <Chip style={{margin: 4}}>{res_temp? ReadJSON().static_text["partner_input"] : ReadJSON().static_text["partner_wait"]}</Chip>
               </span>
             </CardText>
           </Card>
         :
           <Card>
             <CardHeader
-              title={"あなたは応答者です。"}
-              subtitle={"返却ポイントを選択してください。"}
+              title={ReadJSON().static_text["role_responder"]}
+              subtitle={ReadJSON().static_text["respond_point"]}
             />
             <CardText>
               <List>
                 <ListItem>
                   <PassPoint
-                    text='相手から受け取ったポイント'
+                    text={ReadJSON().static_text["reveive_point"]}
                     point={inv_final}
                     rate={game_rate}
                   />
@@ -110,20 +112,20 @@ class Responding extends Component {
                 <ListItem>
                   <HoldPoint
                     point={inv_final * game_rate - res_temp}
-                    text='手もとに残るポイント'
+                    text={ReadJSON().static_text["remain_point"]}
                   />
                 </ListItem>
                 <ListItem>
                   <PassPoint
                     point={res_temp}
-                    text='相手に渡すポイント'
+                    text={ReadJSON().static_text["pass_point"]}
                   />
                 </ListItem>
               </List>
             </CardText>
             <CardActions>
               <RaisedButton
-                label="確定"
+                label={ReadJSON().static_text["confirm"]}
                 primary={true}
                 style={styles.rised}
                 onClick={this.handleConfirm}

@@ -16,6 +16,8 @@ import {
   finishInvesting,
 } from '../actions.js'
 
+import { ReadJSON } from '../../util/ReadJSON'
+
 const mapStateToProps = ({ role, inv_temp, game_point, game_rate }) => ({
   role,
   inv_temp,
@@ -52,21 +54,21 @@ class Investing extends Component {
        {role == "investor"?
         <Card>
           <CardHeader
-            title={"あなたは投資者です。"}
-            subtitle={"投資ポイントを選択してください。"}
+            title={ReadJSON().static_text["role_investor"]}
+            subtitle={ReadJSON().static_text["invest_point"]}
           />
           <CardText>
             <List>
               <ListItem>
                 <HoldPoint
                   point={game_point - inv_temp}
-                  text='手もとに残るポイント'
+                  text={ReadJSON().static_text["remain_point"]}
                 />
               </ListItem>
               <ListItem>
                 <PassPoint
                   point={inv_temp}
-                  text='相手に渡すポイント'
+                  text={ReadJSON().static_text["pass_point"]}
                 />
               </ListItem>
               <ListItem>
@@ -82,7 +84,7 @@ class Investing extends Component {
           </CardText>
           <CardActions>
             <RaisedButton
-              label="確定"
+              label={ReadJSON().static_text["confirm"]}
               primary={true}
               style={style}
               onClick={this.handleConfirm}
@@ -92,12 +94,12 @@ class Investing extends Component {
         :
         <Card>
           <CardHeader
-            title={"あなたは応答者です。"}
-            subtitle={"相手が投資ポイントを選択しています。しばらくお待ちください。"}
+            title={ReadJSON().static_text["role_respoinder"]}
+            subtitle={ReadJSON().static_text["wait_text"]}
           />
           <CardText>
             <span style={{margin: 8}}>
-              <Chip style={{float: "left"}}>{inv_temp? "相手は入力中です。": "相手は待機中です。"}</Chip>
+              <Chip style={{float: "left"}}>{inv_temp? ReadJSON().static_text["partner_input"] : ReadJSON().static_text["partner_wait"]}</Chip>
             </span>
           </CardText>
         </Card>

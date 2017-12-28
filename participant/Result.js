@@ -7,6 +7,8 @@ import PairResult from './PairResult.js'
 
 import { fetchContents } from './actions'
 
+import { ReadJSON } from '../util/ReadJSON'
+
 const mapStateToProps = ({ id, pair_results, game_point, game_rate }) => ({
   id, pair_results, game_point, game_rate
 })
@@ -17,7 +19,7 @@ const Result = ({ id, pair_results, game_point, game_rate }) => {
     <div>
       <Card initiallyExpanded={true}>
         <CardHeader
-          title='グラフ'
+          title={ReadJSON().static_text["graph"]}
           actAsExpander={true}
           showExpandableButton={true}
         />
@@ -27,7 +29,7 @@ const Result = ({ id, pair_results, game_point, game_rate }) => {
       </Card>
       <Card>
         <CardHeader
-          title='各ラウンドの結果'
+          title={ReadJSON().static_text["result"]}
           actAsExpander={true}
           showExpandableButton={true}
         />

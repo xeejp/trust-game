@@ -4,6 +4,8 @@ import { blue400 } from 'material-ui/styles/colors';
 
 import Point from '../components/Point.js'
 
+import { ReadJSON, InsertVariable } from '../util/ReadJSON'
+
 const PassPoint = ({point, text, rate}) => {
   if (rate == null) {
     return (
@@ -15,7 +17,7 @@ const PassPoint = ({point, text, rate}) => {
           style={{margin: 5}}
         >
           <Point>{point}</Point>
-        </Avatar>ポイント
+        </Avatar>{ReadJSON().static_text["point"]}
       </span>
     )
   } else {
@@ -28,14 +30,14 @@ const PassPoint = ({point, text, rate}) => {
           style={{margin: 5}}
         >
           <Point>{point}</Point>
-        </Avatar>×{rate}倍＝
+        </Avatar>×{InsertVariable(ReadJSON().static_text["rate_times"], { rate: rate })}＝
         <Avatar
           backgroundColor={blue400}
           size={50}
           style={{margin: 5}}
         >
           <Point>{point * rate}</Point>
-        </Avatar>ポイント
+        </Avatar>{ReadJSON().static_text["point"]}
       </span>
     )
   }

@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { grey300 } from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 
+import { ReadJSON } from '../util/ReadJSON'
+
 const styles = {
   block: {
     clear: "both",
@@ -18,7 +20,7 @@ const Counter = ({ title, value, min, max, changeHandle}) => (
       defaultValue={value}
       min={min}
       max={max}
-      hintText="自然数を入力して下さい。"
+      hintText={ReadJSON().static_text["counter"]}
       onBlur={changeHandle} />
   </div>
 )

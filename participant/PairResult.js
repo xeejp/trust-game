@@ -6,6 +6,8 @@ import ListItem from 'material-ui/List/ListItem'
 import HoldPoint from './HoldPoint.js'
 import PassPoint from './PassPoint.js'
 
+import { ReadJSON } from '../util/ReadJSON'
+
 const PairResult = ({ id, investor, inv, res, point, rate }) => {
   if (id == investor) {
     return (
@@ -13,20 +15,20 @@ const PairResult = ({ id, investor, inv, res, point, rate }) => {
         <ListItem>
           <PassPoint
             point={inv}
-            text='相手が受け取ったポイント'
+            text={ReadJSON().static_text["passed_point"]}
             rate={rate}
           />
         </ListItem>
         <ListItem>
           <HoldPoint
             point={point - inv}
-            text='手もとに残ったポイント'
+            text={ReadJSON().static_text["remained_point"]}
           />
         </ListItem>
         <ListItem>
           <PassPoint
             point={res}
-            text='帰ってきたポイント'
+            text={ReadJSON().static_text["return_point"]}
           />
         </ListItem>
       </List>
@@ -36,7 +38,7 @@ const PairResult = ({ id, investor, inv, res, point, rate }) => {
       <List>
         <ListItem>
           <PassPoint
-            text='相手から受け取ったポイント'
+            text={ReadJSON().static_text["receive_point"]}
             point={inv}
             rate={rate}
           />
@@ -44,13 +46,13 @@ const PairResult = ({ id, investor, inv, res, point, rate }) => {
         <ListItem>
           <HoldPoint
             point={inv * rate - res}
-            text='手もとに残るポイント'
+            text={ReadJSON().static_text["remain_point"]}
           />
         </ListItem>
         <ListItem>
           <PassPoint
             point={res}
-            text='相手に渡すポイント'
+            text={ReadJSON().static_text["pass_point"]}
           />
         </ListItem>
       </List>

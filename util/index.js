@@ -1,3 +1,5 @@
+import { ReadJSON } from './ReadJSON'
+
 export const game_pages = [
   "waiting",
   "description",
@@ -7,25 +9,25 @@ export const game_pages = [
 
 export function getPageName(page) {
   switch(game_pages.indexOf(page)) {
-    case 0: return "待機"
-    case 1: return "説明"
-    case 2: return "実験"
-    case 3: return "結果"
+    case 0: return ReadJSON().static_text["pages"][0]
+    case 1: return ReadJSON().static_text["pages"][1]
+    case 2: return ReadJSON().static_text["pages"][2]
+    case 3: return ReadJSON().static_text["pages"][3]
   }
 }
 
 export function getRoleName(role) {
   switch(role) {
-    case "visitor"  : return "見学者"
-    case "investor" : return "投資者"
-    case "responder": return "応答者"
+    case "visitor"  : return ReadJSON().static_text["roles"][0]
+    case "investor" : return ReadJSON().static_text["roles"][1]
+    case "responder": return ReadJSON().static_text["roles"][2]
   }
 }
 
 export function getStateName(state) {
   switch(state) {
-    case "investing" : return "投資中"
-    case "responding": return "応答中"
-    case "finished"  : return "終了"
+    case "investing" : return ReadJSON().static_text["status"][0]
+    case "responding": return ReadJSON().static_text["status"][1]
+    case "finished"  : return ReadJSON().static_text["status"][2]
   }
 }

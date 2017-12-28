@@ -8,6 +8,8 @@ import { getRoleName, getStateName } from '../util/index.js'
 
 import { openParticipantPage } from './actions'
 
+import { ReadJSON, InsertVariable } from '../util/ReadJSON'
+
 const User = ({ id, role, point, pair_id, round, state, page, openParticipantPage }) => (
   <tr><td><a onClick={openParticipantPage(id)}>{id}</a></td>
   <td>{page != "waiting"? getRoleName(role) : "-"}</td>
@@ -20,7 +22,7 @@ const User = ({ id, role, point, pair_id, round, state, page, openParticipantPag
 
 const UsersList = ({participants, pairs, page, openParticipantPage }) => (
   <table>
-    <thead><tr><th>ID</th><th>役割</th><td>ポイント</td><td>所属ペアID</td><td>ラウンド</td><td>状態</td></tr></thead>
+    <thead><tr><th>{ReadJSON().static_text["file"][9]}</th><th>{ReadJSON().static_text["file"][12]}</th><td>{ReadJSON().static_text["point"]}</td><td>{ReadJSON().static_text["pair_id"]}</td><td>{ReadJSON().static_text["round"]}</td><td>{ReadJSON().static_text["state"]}</td></tr></thead>
     <tbody>
       {
         Object.keys(participants).sort((id1, id2) => {
@@ -53,7 +55,7 @@ const Pair = ({ id, pair_round, pair_state, game_round }) => (
 
 const Pairs = ({ pairs, participants, game_round}) => (
   <table>
-    <thead><tr><th>ID</th><th>ラウンド</th><th>状況</th></tr></thead>
+    <thead><tr><th>{ReadJSON().static_text["file"][10]}</th><th>{ReadJSON().static_text["round"]}</th><th>{ReadJSON().static_text["state_"]}</th></tr></thead>
     <tbody>
       {
         Object.keys(pairs).map(id => (
@@ -85,7 +87,7 @@ const Users = ({ pairs, participants, game_round, game_page, openParticipantPage
   <div>
     <Card style={{margin: '16px 16px'}}>
       <CardHeader
-        title={"登録者 " + Object.keys(participants).length + "人"}
+        title={InsertVariable(ReadJSON().static_text["participant_num"], { num: Object.keys(participants).length })}
         actAsExpander={true}
         showExpandableButton={true}
       />

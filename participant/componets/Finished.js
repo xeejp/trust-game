@@ -7,6 +7,8 @@ import {
   getRoleName,
 } from 'util/index'
 
+import { ReadJSON } from '../../util/ReadJSON'
+
 const mapStateToProps = ({ role }) => ({
   role
 })
@@ -16,10 +18,10 @@ const Finished = ({ role }) => (() => {
     <Card>
     <CardHeader
     title={getRoleName(role)}
-    subtitle="終了待機"
+    subtitle={ReadJSON().static_text["wait_end"]}
       />
     <CardText>
-    <p>あなたの実験は終了しました。他のペアが終了するまでこのままお待ち下さい。</p>
+    <p>{ReadJSON().static_text["end_text"]}</p>
     </CardText>
     </Card>
     </div>

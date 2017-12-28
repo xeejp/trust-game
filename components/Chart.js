@@ -14,6 +14,8 @@ import LeftIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-left'
 
 import { fallChartButton, changeChartRound } from 'host/actions.js'
 
+import { ReadJSON, InsertVariable } from '../util/ReadJSON'
+
 function compCate(results, round) {
   const keys = results[round]? Object.keys(results[round]) : []
   return keys.sort((a, b) => {
@@ -47,33 +49,33 @@ function compData(categories, results, round) {
     results[round][pair_id]? results[round][pair_id]["return"] : 0) : []
   return [
     {
-      name: "残したポイント",
+      name: ReadJSON().static_text["chart"]["remained_point"],
       data: Array.from(categories).map(p_id => (hold_values[p_id]? hold_values[p_id] : 0)),
       stack: "pair",
       tooltip: {
-        valueSuffix: " [ポイント]"
+        valueSuffix: ReadJSON().static_text["chart"]["point_unit"]
       }
     }
   ].concat([
     {
-      name: "返却したポイント",//[1,0]
+      name: ReadJSON().static_text["chart"]["returned_point"],//[1,0]
       data: Array.from(categories).map(p_id => (return_values[p_id]? return_values[p_id] : 0)),
       stack: "pair",
       tooltip: {
-        valueSuffix: " [ポイント]"
+        valueSuffix: ReadJSON().static_text["chart"]["point_unit"]
       }
     }
   ].concat([
     {
       yAxis: 1,
-      name: "戻された割合",
+      name: ReadJSON().static_text["chart"]["returned_rate"],
       data: Array.from(categories).map(p_id => (
         (hold_values[p_id] + return_values[p_id] > 0 ) ?
           Math.round(return_values[p_id] * 100 / (return_values[p_id] + hold_values[p_id])) : 0)),
       type: "spline",
       dashStyle: "shortdot",
       tooltip: {
-        valueSuffix: " [%]"
+        valueSuffix: ReadJSON().static_text["chart"]["rate_unit"]
       }
     }
   ]))
@@ -92,20 +94,20 @@ const mapStateToProps = ({ trust_results, chart_button, chart_round, role }) => 
         href: 'https://xee.jp/'
       },
       title: {
-        text: "応答者の反応"
+        text: ReadJSON().static_text["chart"]["responder_react"]
       },
       xAxis: {
         categories: compCate(trust_results, i+1),
         crosshair: true,
         title: {
-          text: "ペア"
+          text: ReadJSON().static_text["chart"]["pair"]
         },
       },
       yAxis: [
         {
           min: 0,
           title: {
-            text: "ポイント"
+            text: ReadJSON().static_text["point"]
           },
           labels: {
             step: 1,
@@ -115,7 +117,7 @@ const mapStateToProps = ({ trust_results, chart_button, chart_round, role }) => 
           min: 0,
           max: 100,
           title: {
-            text: "戻された割合 [%]"
+            text: ReadJSON().static_text["chart"]["returned_rate"] + ReadJSON().static_text["chart"]["rate_unit"]
           },
           opposite: true,
         }
@@ -123,7 +125,7 @@ const mapStateToProps = ({ trust_results, chart_button, chart_round, role }) => 
       tooltip: {
         shared: true,
         formatter: function () {
-          var line = '<b>ペアID: ' + this.x + '</b><br/>'
+          var line = '<b>' + InsertVariable(ReadJSON().static_text["chart"]["pair_id"], { id: this.x }) + '</b><br/>'
           this.points.forEach(i => {
             line += i.series.name + ': ' + i.y + '<br />'
           })
@@ -229,7 +231,7 @@ class Chart extends Component {
         onExpandChange={this.handleExpandChange}
       >
         <CardHeader
-          title="グラフ"
+          title={ReadJSON().static_text["graph"]}
           actAsExpander={true}
           showExpandableButton={true}
         />
@@ -240,28 +242,28 @@ class Chart extends Component {
           <div>
             { chart_round != 1?
               <IconButton iconStyle={styles.mediumIcon} style={styles.left}
-                tooltip="ラウンドを下げる" onClick={this.handleDec}>
+                tooltip={ReadJSON().static_text["chart"]["down_round"]} onClick={this.handleDec}>
                 <LeftIcon/>
               </IconButton>
             :
               <IconButton iconStyle={styles.mediumIcon} style={styles.left}
-                tooltip="最初のラウンドです">
+                tooltip={ReadJSON().static_text["chart"]["first_round"]}>
                 <LeftIcon color={grey300}/>
               </IconButton>
             }
             { chart_round != max_chart_round?
               <IconButton iconStyle={styles.mediumIcon} style={styles.right}
-                tooltip="ラウンドを上げる" onClick={this.handleInc} >
+                tooltip={ReadJSON().static_text["chart"]["up_round"]} onClick={this.handleInc} >
                 <RightIcon/>
               </IconButton>
             :
               <IconButton iconStyle={styles.mediumIcon} style={styles.right}
-                tooltip="最後のラウンドです">
+                tooltip={ReadJSON().static_text["chart"]["final_round"]}>
                 <RightIcon color={grey300}/>
               </IconButton>
             }
             <div style={{clear: "both", margin: "auto"}} >
-              <Chip style={{margin: "auto"}}>表示ラウンド: {chart_round}</Chip>
+              <Chip style={{margin: "auto"}}>{InsertVariable(ReadJSON().static_text["chart"]["current_round"], { round: chart_round })}</Chip>
             </div>
           </div>
         </CardText>
