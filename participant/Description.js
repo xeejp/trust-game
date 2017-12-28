@@ -5,10 +5,10 @@ import {Card, CardText, CardTitle } from 'material-ui/Card'
 import {List, ListItem} from 'material-ui/List'
 import { getGamemodeName } from 'util/index'
 
-import { ReadJSON } from '../util/ReadJSON'
+import { ReadJSON, InsertVariable, LineBreak } from '../util/ReadJSON'
 
-const mapStateToProps = ({ question, game_round, game_rate, game_point }) => ({
-  question,
+const mapStateToProps = ({ dynamic_text, game_round, game_rate, game_point }) => ({
+  dynamic_text,
   game_round,
   game_rate,
   game_point,
@@ -16,12 +16,12 @@ const mapStateToProps = ({ question, game_round, game_rate, game_point }) => ({
 
 class Description extends Component {
   render() {
-    const { question, game_round, game_rate, game_point } = this.props
+    const { dynamic_text, game_round, game_rate, game_point } = this.props
     return (
       <Card>
         <CardTitle title={ReadJSON().static_text["title"]} subtitle={ReadJSON().static_text["desc"]} />
         <CardText>
-          <p>{question}</p>
+          <p>{LineBreak(InsertVariable(dynamic_text["description"][1], { round: game_round, point: game_point, rate: game_rate  }))}</p>
         </CardText>
       </Card>
     )

@@ -59,8 +59,8 @@ defmodule TrustGame.Host do
     %{data | isFirstVisit: false}
   end
 
-  def change_game_question(data, text) do
-    %{data | question: text}
+  def change_game_question(data, dynamic_text) do
+    %{data | dynamic_text: dynamic_text}
   end
 
   def match(data) do

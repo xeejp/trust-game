@@ -10,8 +10,9 @@ import TextField from 'material-ui/TextField'
 import { changeQuestion } from './actions.js'
 
 import { ReadJSON } from '../util/ReadJSON'
+import { fetchContents } from '../participant/actions';
 
-const mapStateToProps = ({ question }) => ({ question })
+const mapStateToProps = ({ dynamic_text, question }) => ({ dynamic_text, question })
 
 class EditQuestion extends Component {
   constructor(props){
@@ -20,17 +21,28 @@ class EditQuestion extends Component {
     this.handleClose = this.handleClose.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleConfirm = this.handleConfirm.bind(this)
+
+    const { dynamic_text } = this.props
+    var default_text = dynamic_text
+    console.log("ABBABABBABBABBA")
+    console.log(dynamic_text)
+    if(!dynamic_text) {
+      default_text = ReadJSON().dynamic_text
+      const { dispatch } = this.props
+      dispatch(changeQuestion(default_text))
+    }
     this.state = {
       open: false,
-      text: ''
+      dynamic_text: default_text,
     }
   }
 
   handleOpen() {
-    const { question } = this.props
+    const { dispatch } = this.props
+    dispatch(fetchContents())
     this.setState({
       open: true,
-      text: question
+      text: this.props.dynamic_text
     })
   }
 
@@ -42,10 +54,19 @@ class EditQuestion extends Component {
     this.setState({text: event.target.value})
   }
 
+  handleChangeDynamicText(value, event){
+    var dynamic_text = Object.assign({}, this.state.dynamic_text)
+    var temp = dynamic_text
+    for(var i = 0; i < value.length - 1; i++){
+      temp = temp[value[i]]
+    }
+    temp[value[value.length - 1]] = event.target.value
+    this.setState({ dynamic_text: dynamic_text })
+  }
+
   handleConfirm() {
     const { dispatch } = this.props
-    const { text } = this.state
-    dispatch(changeQuestion(text))
+    dispatch(changeQuestion(this.state.default_text))
     this.handleClose()
   }
 
@@ -81,7 +102,7 @@ class EditQuestion extends Component {
           <TextField
             id="question"
             value={text}
-            onChange={this.handleChange}
+            onChange={this.handleChangeDynamicText.bind(this, ["description", 1])}
             multiLine={true}
             fullWidth={true}
           />

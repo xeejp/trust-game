@@ -7,10 +7,6 @@ defmodule TrustGame do
   alias TrustGame.Main
   alias TrustGame.Actions
 
-  @question """
-  あなたは誰かとペアになって実験を行います。\n参加者には2つの役割があり、今回は{round}回の役割交代があります。\n投資者\nポイントをどれだけ相手に投資するか決定できる\n応答者\nポイントをどれだけ相手に返すか決定できる\nはじめに投資者に{point}ポイントが配られます。\n投資者が投資したポイントは仲介者が{rate}倍にして応答者に送られます。\n応答者が投資者に返すポイントを決定したらそのラウンドは終了し、累計ポイントに加算されます。
-  """
-
   # Callbacks
   def script_type do
     :message
@@ -20,7 +16,7 @@ defmodule TrustGame do
 
   def init do
     {:ok, %{data: %{
-      question: @question,
+      dynamic_text: %{},
       game_page: "waiting",
       game_round: 1,
       game_point: 10,
@@ -55,7 +51,7 @@ defmodule TrustGame do
       {"CHANGE_GAME_POINT", game_point} -> Host.change_game_point(data, game_point)
       {"CHANGE_GAME_RATE", game_rate} -> Host.change_game_rate(data, game_rate)
       {"VISIT", _} -> Host.visit(data)
-      {"CHANGE_QUESTION", text} -> Host.change_game_question(data, text)
+      {"CHANGE_QUESTION", dynamic_text} -> Host.change_game_question(data, dynamic_text)
       _ -> {:ok, %{data: data}}
     end
     wrap_result(data, result)

@@ -6,6 +6,7 @@ defmodule TrustGame.Participant do
     rule = %{
       pair_results: true,
       question: true,
+      dynamic_text: true,
       game_page: true,
       game_round: true,
       game_point: true,
