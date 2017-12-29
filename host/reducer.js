@@ -18,7 +18,6 @@ import {
 } from './actions.js'
 
 const initialState = {
-  question: '',
   participants: {},
   pairs: {},
   loading: true,

@@ -22,6 +22,15 @@ class Description extends Component {
         <CardTitle title={ReadJSON().static_text["title"]} subtitle={ReadJSON().static_text["desc"]} />
         <CardText>
           <p>{LineBreak(InsertVariable(dynamic_text["description"][1], { round: game_round, point: game_point, rate: game_rate  }))}</p>
+          <ListItem
+            primaryText={dynamic_text["description"][2]}
+            secondaryText={dynamic_text["description"][3]}
+          />
+          <ListItem
+            primaryText={dynamic_text["description"][4]}
+            secondaryText={dynamic_text["description"][5]}
+          />
+          <p>{LineBreak(InsertVariable(dynamic_text["description"][6], { round: game_round, point: game_point, rate: game_rate  }))}</p>
         </CardText>
       </Card>
     )

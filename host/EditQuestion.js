@@ -12,20 +12,17 @@ import { changeQuestion } from './actions.js'
 import { ReadJSON } from '../util/ReadJSON'
 import { fetchContents } from '../participant/actions';
 
-const mapStateToProps = ({ dynamic_text, question }) => ({ dynamic_text, question })
+const mapStateToProps = ({ dynamic_text }) => ({ dynamic_text })
 
 class EditQuestion extends Component {
   constructor(props){
     super(props)
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
-    this.handleChange = this.handleChange.bind(this)
     this.handleConfirm = this.handleConfirm.bind(this)
 
     const { dynamic_text } = this.props
     var default_text = dynamic_text
-    console.log("ABBABABBABBABBA")
-    console.log(dynamic_text)
     if(!dynamic_text) {
       default_text = ReadJSON().dynamic_text
       const { dispatch } = this.props
@@ -50,10 +47,6 @@ class EditQuestion extends Component {
     this.setState({open: false})
   }
 
-  handleChange(event) {
-    this.setState({text: event.target.value})
-  }
-
   handleChangeDynamicText(value, event){
     var dynamic_text = Object.assign({}, this.state.dynamic_text)
     var temp = dynamic_text
@@ -66,13 +59,13 @@ class EditQuestion extends Component {
 
   handleConfirm() {
     const { dispatch } = this.props
-    dispatch(changeQuestion(this.state.default_text))
+    dispatch(changeQuestion(this.state.dynamic_text))
     this.handleClose()
   }
 
   render(){
     const { style, disabled } = this.props
-    const { text } = this.state
+    const { dynamic_text } = this.state
     const actions = [
       <RaisedButton
         label={ReadJSON().static_text["apply"]}
@@ -100,9 +93,32 @@ class EditQuestion extends Component {
           autoScrollBodyContent={true}
         >
           <TextField
-            id="question"
-            value={text}
+            value={dynamic_text["description"][1]}
             onChange={this.handleChangeDynamicText.bind(this, ["description", 1])}
+            multiLine={true}
+            fullWidth={true}
+          />
+          <TextField
+            value={dynamic_text["description"][2]}
+            onChange={this.handleChangeDynamicText.bind(this, ["description", 2])}
+          />
+          <TextField
+            value={dynamic_text["description"][3]}
+            onChange={this.handleChangeDynamicText.bind(this, ["description", 3])}
+            fullWidth={true}
+          />
+          <TextField
+            value={dynamic_text["description"][4]}
+            onChange={this.handleChangeDynamicText.bind(this, ["description", 4])}
+          />
+          <TextField
+            value={dynamic_text["description"][5]}
+            onChange={this.handleChangeDynamicText.bind(this, ["description", 5])}
+            fullWidth={true}
+          />
+          <TextField
+            value={dynamic_text["description"][6]}
+            onChange={this.handleChangeDynamicText.bind(this, ["description", 6])}
             multiLine={true}
             fullWidth={true}
           />

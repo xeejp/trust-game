@@ -57,6 +57,11 @@ class Respond extends Component {
     this.handleRequestClose = this.handleRequestClose.bind(this)
     this.handleRequestClose2 = this.handleRequestClose2.bind(this)
     this.handleRequestClose3 = this.handleRequestClose3.bind(this)
+    this.handleRequestClose4 = this.handleRequestClose4.bind(this)
+    this.state = {
+      pass_flag: false,
+      return_flag: false,
+    }
   }
 
   handleRequestClose = () => {
@@ -74,6 +79,13 @@ class Respond extends Component {
     dispatch(fallSnackBarFlags3())
   }
 
+  handleRequestClose4 = () => {
+    this.setState({
+      pass_flag: false,
+      return_flag: false,
+    })
+  }
+
   renderContents () {
     const { pair_state } = this.props
     switch(pair_state) {
@@ -89,6 +101,16 @@ class Respond extends Component {
   componentWillReceiveProps(props) {
     if (props.role !== this.props.role && props.role === "investor") {
       this.props.dispatch(noticeRoleChanged())
+    }
+    if(props.role === "responder" && props.pair_state === "responding" && this.props.pair_state === "investing") {
+      this.setState({
+        pass_flag: true
+      })
+    }
+    if(this.props.role === "investor" && (props.pair_state === "investing" || props.pair_state === "finished") && this.props.pair_state === "responding") {
+      this.setState({
+        return_flag: true
+      })
     }
   }
 
@@ -126,9 +148,19 @@ class Respond extends Component {
             onRequestClose={this.handleRequestClose}
           />
           <Notice
-            open={change_role_flag}
-            message={ReadJSON().static_text["role_change"]}
+            open={change_role_flag && pair_state != "finished" && game_round != 1}
+            message={InsertVariable(ReadJSON().static_text["role_change"], { role: getRoleName(role) })}
             onRequestClose={this.handleRequestClose2}
+          />
+          <Notice
+            open={this.state.pass_flag && pair_state != "finished"}
+            message={"投資者から" + inv_final + "ポイント投資されました。返却ポイントを選択してください。"}
+            onRequestClose={this.handleRequestClose4}
+          />
+          <Notice
+            open={this.state.return_flag && false}
+            message={"応答者から" + res_final + "ポイント返却されました。"}
+            onRequestClose={this.handleRequestClose4}
           />
         </div>
       :

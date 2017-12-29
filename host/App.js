@@ -5,6 +5,7 @@ import {
   fetchContents,
   intoLoading,
   exitLoading,
+  changePage,
 } from './actions.js'
 
 import FlatButton from 'material-ui/FlatButton';
@@ -20,8 +21,8 @@ import throttle from 'react-throttle-render'
 
 const ThrottledChart = throttle(Chart, 100)
 
-const mapStateToProps = ({ dispatch ,game_page}) => ({
-  dispatch ,game_page
+const mapStateToProps = ({ dispatch ,game_page, pairs }) => ({
+  dispatch, game_page, pairs
 })
 
 class App extends Component {
@@ -35,6 +36,16 @@ class App extends Component {
     dispatch(intoLoading())
     dispatch(fetchContents())
     dispatch(exitLoading())
+  }
+
+  componentWillReceiveProps({ pairs, game_page }) {
+    if(game_page == "experiment") {
+      for(var key in pairs) {
+        if(pairs[key].pair_state != "finished") return
+      }
+      const { dispatch } = this.props
+      dispatch(changePage("result"))
+    }
   }
 
   render() {
