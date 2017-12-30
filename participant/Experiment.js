@@ -27,14 +27,14 @@ const mapStateToProps = ({
   point, game_progress,
   change_role_flag,
   invested_flag, responded_flag,
-  inv_final, res_final,
+  inv_final, res_final, ret,
 }) => ({
   pair_state, role,
   game_round, pair_round,
   point, game_progress,
   change_role_flag,
   invested_flag, responded_flag,
-  inv_final, res_final,
+  inv_final, res_final, ret,
 })
 
 const styles = {
@@ -121,7 +121,7 @@ class Respond extends Component {
       game_progress,
       change_role_flag, pair_state,
       invested_flag, responded_flag,
-      inv_final, res_final,
+      inv_final, res_final, ret,
     } = this.props
     return (
       role != "visitor"?
@@ -158,8 +158,8 @@ class Respond extends Component {
             onRequestClose={this.handleRequestClose4}
           />
           <Notice
-            open={this.state.return_flag && false}
-            message={"応答者から" + res_final + "ポイント返却されました。"}
+            open={this.state.return_flag}
+            message={"応答者から" + ret + "ポイント返却されました。"}
             onRequestClose={this.handleRequestClose4}
           />
         </div>

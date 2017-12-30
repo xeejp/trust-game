@@ -36,7 +36,7 @@ const UsersList = ({participants, pairs, page, openParticipantPage }) => (
             key={id}
             id={id}
             role={participants[id].role}
-            point={participants[id].point}
+            point={Math.round(participants[id].point * 10) / 10}
             pair_id={participants[id].pair_id}
             round={pairs[participants[id].pair_id]? pairs[participants[id].pair_id].pair_round : null}
             state={pairs[participants[id].pair_id]? pairs[participants[id].pair_id].pair_state : null}

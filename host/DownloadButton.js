@@ -15,7 +15,7 @@ const DownloadButton = ({ participants, trust_results, game_point, game_rate, ga
     style={style}
     disabled={disabled}
     onClick={() => {
-      var fileName = "trust_game" + new Date() + ".csv"
+      var fileName = "trust_game.csv"
 
       var content = [
       [ReadJSON().static_text["title"]],

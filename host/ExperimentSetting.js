@@ -157,7 +157,7 @@ class ExperimentSetting extends Component {
             changeHandle={this.handleRate}
           />
           <Counter
-            title={ReadJSON().static_text["start_rate"]}
+            title={ReadJSON().static_text["start_point"]}
             value={game_point_temp}
             min={1}
             minTip={ReadJSON().static_text["min_point"]}

@@ -81,6 +81,7 @@ defmodule TrustGame.Participant do
     if "responding" == get_in(data, [:pairs, pair_id, :pair_state]) do
       put_in(data, [:pairs, pair_id, :pair_round], getNextPairRound(data, pair_id))
       |> put_in([:participants, id, :role], getNextRole(get_in(data, [:participants, id, :role])))
+      |> put_in([:participants, target_id, :ret], res_final)
       |> put_in([:participants, target_id, :role], getNextRole(get_in(data, [:participants, target_id, :role])))
       |> put_in([:participants, id, :point], # id = Responder
         inv_final*game_rate - res_final + get_in(data, [:participants, id, :point]))

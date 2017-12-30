@@ -39,7 +39,7 @@ class EditQuestion extends Component {
     dispatch(fetchContents())
     this.setState({
       open: true,
-      text: this.props.dynamic_text
+      dynamic_text: this.props.dynamic_text
     })
   }
 
@@ -93,36 +93,41 @@ class EditQuestion extends Component {
           autoScrollBodyContent={true}
         >
           <TextField
-            value={dynamic_text["description"][1]}
-            onChange={this.handleChangeDynamicText.bind(this, ["description", 1])}
+            hintText={ReadJSON().dynamic_text["description"][1]}
+            defaultValue={dynamic_text["description"][1]}
+            onBlur={this.handleChangeDynamicText.bind(this, ["description", 1])}
             multiLine={true}
             fullWidth={true}
           />
           <TextField
-            value={dynamic_text["description"][2]}
-            onChange={this.handleChangeDynamicText.bind(this, ["description", 2])}
+            hintText={ReadJSON().dynamic_text["description"][2]}
+            defaultValue={dynamic_text["description"][2]}
+            onBlur={this.handleChangeDynamicText.bind(this, ["description", 2])}
           />
           <TextField
-            value={dynamic_text["description"][3]}
-            onChange={this.handleChangeDynamicText.bind(this, ["description", 3])}
+            hintText={ReadJSON().dynamic_text["description"][3]}
+            defaultValue={dynamic_text["description"][3]}
+            onBlur={this.handleChangeDynamicText.bind(this, ["description", 3])}
             fullWidth={true}
           />
           <TextField
-            value={dynamic_text["description"][4]}
-            onChange={this.handleChangeDynamicText.bind(this, ["description", 4])}
+            hintText={ReadJSON().dynamic_text["description"][4]}
+            defaultValue={dynamic_text["description"][4]}
+            onBlur={this.handleChangeDynamicText.bind(this, ["description", 4])}
           />
           <TextField
-            value={dynamic_text["description"][5]}
-            onChange={this.handleChangeDynamicText.bind(this, ["description", 5])}
+            hintText={ReadJSON().dynamic_text["description"][5]}
+            defaultValue={dynamic_text["description"][5]}
+            onBlur={this.handleChangeDynamicText.bind(this, ["description", 5])}
             fullWidth={true}
           />
           <TextField
-            value={dynamic_text["description"][6]}
-            onChange={this.handleChangeDynamicText.bind(this, ["description", 6])}
+            hintText={ReadJSON().dynamic_text["description"][6]}
+            defaultValue={dynamic_text["description"][6]}
+            onBlur={this.handleChangeDynamicText.bind(this, ["description", 6])}
             multiLine={true}
             fullWidth={true}
-          />
-        </Dialog>
+          />        </Dialog>
       </span>
     )
   }
