@@ -154,12 +154,12 @@ class Respond extends Component {
           />
           <Notice
             open={this.state.pass_flag && pair_state != "finished"}
-            message={"投資者から" + inv_final + "ポイント投資されました。返却ポイントを選択してください。"}
+            message={InsertVariable(ReadJSON().static_text["inv_notice"], { point: inv_final })}
             onRequestClose={this.handleRequestClose4}
           />
           <Notice
             open={this.state.return_flag}
-            message={"応答者から" + ret + "ポイント返却されました。"}
+            message={InsertVariable(ReadJSON().static_text["ret_notice"], { point: ret })}
             onRequestClose={this.handleRequestClose4}
           />
         </div>

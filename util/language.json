@@ -98,6 +98,9 @@
     "remain_point_v": "手元に残るポイント: <point>",
     "pass_point_v": "相手に渡すポイント: <point>",
 
+    "inv_notice": "投資者から<point>ポイント投資されました。返却ポイントを選択してください。",
+    "ret_notice": "応答者から<point>ポイント返却されました。",
+
     "chart": {
       "remained_point": "残したポイント",
       "returned_point": "返却したポイント",
