@@ -16,7 +16,7 @@ import {
   finishInvesting,
 } from '../actions.js'
 
-import { ReadJSON } from '../../util/ReadJSON'
+import { ReadJSON, InsertVariable } from '../../util/ReadJSON'
 
 const mapStateToProps = ({ role, inv_temp, game_point, game_rate }) => ({
   role,
@@ -72,13 +72,20 @@ class Investing extends Component {
                 />
               </ListItem>
               <ListItem>
-                <Slider
-                  min={0}
-                  max={game_point}
-                  divisor={10}
-                  value={inv_temp}
-                  onChange={this.handleThinking}
-                />
+                <span style={{margin: 4}}>
+                  <div style={{ position: "relative", marginBottom: "5%"}}>
+                    <h4 style={{ position: "absolute",  left: "1%", backgroundColor: "rgba(255,255,255,0.5)", pointerEvents: "none" }}>{InsertVariable(ReadJSON().static_text["remain_point_v"], { point: Math.round((game_point - inv_temp) * 10) / 10 })}</h4>
+                    <h4 style={{ position: "absolute", right: "1%", backgroundColor: "rgba(255,255,255,0.5)", pointerEvents: "none" }}>{InsertVariable(ReadJSON().static_text["pass_point_v"], { point: Math.round((inv_temp) * 10) / 10 })}</h4>
+                    <div style={{ clear: "both" }}></div>
+                    <Slider
+                      min={0}
+                      max={game_point}
+                      divisor={10}
+                      value={inv_temp}
+                      onChange={this.handleThinking}
+                    />
+                  </div>
+                </span>
               </ListItem>
             </List>
           </CardText>

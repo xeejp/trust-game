@@ -19,7 +19,7 @@ import {
 } from '../actions.js'
 import { Slider } from 'xee-components'
 
-import { ReadJSON } from '../../util/ReadJSON'
+import { ReadJSON, InsertVariable } from '../../util/ReadJSON'
 
 const mapStateToProps = ({ inv_final, res_temp, role, game_point, game_rate }) => ({
   inv_final, res_temp, role, game_point, game_rate,
@@ -99,15 +99,22 @@ class Responding extends Component {
                   />
                 </ListItem>
                 <ListItem>
-                  <Slider
-                    divisor={10}
-                    min={0}
-                    max={inv_final * game_rate}
-                    step={1}
-                    value={res_temp}
-                    onChange={this.handleThinking}
-                    style={{height: '30px'}}
-                  />
+                  <span style={{margin: 4}}>
+                    <div style={{ position: "relative", marginBottom: "5%"}}>
+                      <h4 style={{ position: "absolute",  left: "1%", backgroundColor: "rgba(255,255,255,0.5)", pointerEvents: "none" }}>{InsertVariable(ReadJSON().static_text["remain_point_v"], { point: Math.round((inv_final * game_rate - res_temp) * 10) / 10 })}</h4>
+                      <h4 style={{ position: "absolute", right: "1%", backgroundColor: "rgba(255,255,255,0.5)", pointerEvents: "none" }}>{InsertVariable(ReadJSON().static_text["pass_point_v"], { point: Math.round((res_temp) * 10) / 10 })}</h4>
+                      <div style={{ clear: "both" }}></div>
+                      <Slider
+                        divisor={10}
+                        min={0}
+                        max={inv_final * game_rate}
+                        step={1}
+                        value={res_temp}
+                        onChange={this.handleThinking}
+                        style={{height: '30px'}}
+                      />
+                    </div>
+                  </span>
                 </ListItem>
                 <ListItem>
                   <HoldPoint

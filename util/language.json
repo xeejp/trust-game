@@ -95,6 +95,9 @@
 
     "close": "閉じる",
 
+    "remain_point_v": "手元に残るポイント: <point>",
+    "pass_point_v": "相手に渡すポイント: <point>",
+
     "chart": {
       "remained_point": "残したポイント",
       "returned_point": "返却したポイント",
