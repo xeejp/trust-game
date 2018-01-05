@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import {Card, CardText, CardTitle } from 'material-ui/Card'
 import {List, ListItem} from 'material-ui/List'
-import { getGamemodeName } from 'util/index'
+import { getGamemodeName } from '../util/index'
 
 import { ReadJSON, InsertVariable, LineBreak } from '../util/ReadJSON'
 

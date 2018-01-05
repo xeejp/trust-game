@@ -12,7 +12,7 @@ import IconButton from 'material-ui/IconButton';
 import RightIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 import LeftIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-left'
 
-import { fallChartButton, changeChartRound } from 'host/actions.js'
+import { fallChartButton, changeChartRound } from '../host/actions.js'
 
 import { ReadJSON, InsertVariable } from '../util/ReadJSON'
 

@@ -7,7 +7,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ActionSettings from 'material-ui/svg-icons/action/settings'
 import Dialog from 'material-ui/Dialog';
 
-import Counter from 'components/Counter'
+import Counter from '../components/Counter'
 
 import { changeGameRound, changeGameRate , changeGamePoint, visit } from './actions.js'
 

@@ -12,7 +12,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider'
 
-import { getPageName, game_pages } from 'util/index'
+import { getPageName, game_pages } from '../util/index'
 
 import {
   changePage,

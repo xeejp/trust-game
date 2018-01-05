@@ -3,7 +3,7 @@ import { handleAction, handleActions } from 'redux-actions'
 
 import {
   game_modes, pages, roles, states,
-} from 'util/index'
+} from '../util/index'
 
 import {
   changePage,

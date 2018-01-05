@@ -5,7 +5,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 
 import {
   getRoleName,
-} from 'util/index'
+} from '../../util/index'
 
 import { ReadJSON } from '../../util/ReadJSON'
 

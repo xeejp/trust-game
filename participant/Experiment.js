@@ -17,7 +17,7 @@ import {
 
 import {
   getRoleName,
-} from 'util/index'
+} from '../util/index'
 
 import { ReadJSON, InsertVariable } from '../util/ReadJSON'
 

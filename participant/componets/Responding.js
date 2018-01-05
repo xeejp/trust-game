@@ -11,7 +11,7 @@ import ListItem from 'material-ui/List/ListItem'
 import HoldPoint from '../HoldPoint.js'
 import PassPoint from '../PassPoint.js'
 
-import { getRoleName } from 'util/index'
+import { getRoleName } from '../../util/index'
 
 import {
   syncResTemp,
